@@ -1,0 +1,4 @@
+node_modules
+.env
+
+#creating the production ready

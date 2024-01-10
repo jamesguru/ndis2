@@ -6,6 +6,7 @@ import { useEffect } from "react";
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [success, setSuccess] = useState(false);
+  const [date, setDate] = useState("");
   const [staffs, setStaffs] = useState([]);
 
   const handleChange = (e) => {
@@ -24,8 +25,12 @@ export default function NewProduct() {
   }, []);
   const handleClick = async (e) => {
     e.preventDefault();
+    const dateObject = new Date(date);
+    // Use toLocaleDateString to format the date
+    const formattedDate = dateObject.toLocaleDateString('en-AU');
+    console.log(formattedDate)
     try {
-      await publicRequest.post("/shifts", inputs);
+      await publicRequest.post("/shifts", {...inputs, "date":formattedDate});
       setSuccess(true);
       window.location.reload();
     } catch (error) {
@@ -51,7 +56,7 @@ export default function NewProduct() {
             type="date"
             placeholder="2023-12-15"
             name="date"
-            onChange={handleChange}
+            onChange={(e) => setDate(e.target.value)}
           />
           <input
             type="text"

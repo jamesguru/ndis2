@@ -219,52 +219,56 @@ const Shift = () => {
           )}
         </div>
 
-        <div className="shift_casenotes">
-          <table>
-            <tr>
-              <th>Date/Time</th>
-              <th>Case</th>
-              <th>Notes</th>
-            </tr>
-
-            {shift?.casenotes?.length ? (
-              shift?.casenotes?.map((casenote, index) => (
-                <tr key={index}>
-                  <td>{casenote.time}</td>
-                  <td>{casenote.event}</td>
-                  <td>{casenote.notes}</td>
-                </tr>
-              ))
-            ) : (
-              <h3>No case notes Added</h3>
-            )}
-          </table>
-
-          <div className="add_casenotes">
-            <span>Add CaseNotes</span>
-            <FaPlus className="add_casenotes_icon" onClick={handleCaseNotes} />
-          </div>
-
-          {open && (
-            <div className="casenotes_inputs">
-              <label htmlFor="">Case</label>
-              <input type="text" onChange={(e) => setEvent(e.target.value)} />
-              <label htmlFor="">Notes</label>
-              <textarea
-                name=""
-                id=""
-                cols="30"
-                rows="10"
-                onChange={(e) => setNotes(e.target.value)}
-              ></textarea>
-              <button onClick={handleAddNotes}>Submit</button>
+            {shift.staffEmail && 
+            
+            <div className="shift_casenotes">
+            <table>
+              <tr>
+                <th>Date/Time</th>
+                <th>Case</th>
+                <th>Notes</th>
+              </tr>
+  
+              {shift?.casenotes?.length ? (
+                shift?.casenotes?.map((casenote, index) => (
+                  <tr key={index}>
+                    <td>{casenote.time}</td>
+                    <td>{casenote.event}</td>
+                    <td>{casenote.notes}</td>
+                  </tr>
+                ))
+              ) : (
+                <h3>No case notes Added</h3>
+              )}
+            </table>
+  
+            <div className="add_casenotes">
+              <span>Add CaseNotes</span>
+              <FaPlus className="add_casenotes_icon" onClick={handleCaseNotes} />
             </div>
-          )}
-        </div>
+  
+            {open && (
+              <div className="casenotes_inputs">
+                <label htmlFor="">Case</label>
+                <input type="text" onChange={(e) => setEvent(e.target.value)} />
+                <label htmlFor="">Notes</label>
+                <textarea
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="10"
+                  onChange={(e) => setNotes(e.target.value)}
+                ></textarea>
+                <button onClick={handleAddNotes}>Submit</button>
+              </div>
+            )}
+          </div>
+            
+            }
       </div>
       <div className="button-container">
         <Link to="/report">
-          <button className="shift_report_btn">Report Incidence</button>
+          <button className="shift_report_btn">Report</button>
         </Link>
 
         <div className="clockin_out">

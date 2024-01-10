@@ -11,7 +11,7 @@
 }
 
 .productAddButton {
-  width: 80px;
+  width: 150px;
   border: none;
   padding: 5px;
   background-color: teal;
@@ -64,6 +64,8 @@
 
 .productInfoBottom {
   margin-top: 10px;
+  overflow-y: scroll;
+  height: 200px;
 }
 
 .productInfoBottom ul{
@@ -128,15 +130,7 @@
   margin: 20px 0px;
 }
 
-.productFormLeft button{
-  padding: 10px;
-  outline: none;
-  border: none;
-  background-color: teal;
-  cursor: pointer;
-  color: #fff;
-  font-size: 18px;
-}
+
 
 .productUploadImg{
   width: 100px;
@@ -216,5 +210,20 @@ th{
   padding: 5px;
   font-size: 20px;
  
+}
+.error{
+  color: red;
+}
+
+.cancel-shift{
+
+  margin: 20px 0px;
+  background-color: rgb(207, 38, 38);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px;
+  font-weight: 900;
+  font-size: 15px;
 }
 

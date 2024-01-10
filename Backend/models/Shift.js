@@ -8,6 +8,8 @@ const ShiftSchema = mongoose.Schema(
     duration: { type: String, require: true },
     client: { type: String, require: true },
     staffEmail:{type:String,default:""},
+    amount:{type:Number,default:0},
+    paid: {type:Number, default:0},
     notes: { type: String },
     clockin: [{
         time:{type:String},

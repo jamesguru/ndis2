@@ -48,7 +48,16 @@ const Login = () => {
             />
           </div>
 
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Password:<span
+              style={{
+                display: "inline",
+                cursor: "pointer",
+                fontSize: "20px",
+              }}
+              onClick={handleTogglePassword}
+            >
+              {showPassword ?  "👁️" : "🔒"}
+            </span></label>
           <div className="password">
             <input
               type={showPassword ? "text" : "password"}
@@ -57,16 +66,7 @@ const Login = () => {
               className="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span
-              style={{
-                display: "inline",
-                cursor: "pointer",
-                fontSize: "20px",
-              }}
-              onClick={handleTogglePassword}
-            >
-              {showPassword ? "🔒" : "👁️"}
-            </span>
+            
           </div>
           <span className="login-btn" onClick={handleLogin}>
             {loading ? "loading ..." : "Login"}

@@ -4,15 +4,15 @@ const sendMail = require("../helpers/sendEmail");
 const path = require("path");
 dotenv.config();
 const attachmentPath = path.join(__dirname, 'attachments', 'manual.pdf');
-const sendWelcomeEmail = async (fullname, staffID, password, email) => {
+const sendUpdatePasswordEmail = async (email,password) => {
   ejs.renderFile(
-    "templates/welcome.ejs",
-    {fullname, staffID, password},
+    "templates/updatePassword.ejs",
+    {password},
     async (err, data) => {
       let messageoption = {
         from: process.env.EMAIL,
         to: email,
-        subject: "Welcome to Aim Taskers",
+        subject: "You've changed your password.",
         html: data,
         attachments: [
           {
@@ -30,4 +30,4 @@ const sendWelcomeEmail = async (fullname, staffID, password, email) => {
   );
 };
 
-module.exports={sendWelcomeEmail};
+module.exports={sendUpdatePasswordEmail};

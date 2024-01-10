@@ -8,12 +8,14 @@ const {
   verifyTokenAndAdmin,
   verifyTokenAndAuthorization,
 } = require("../middlewares/verifyToken");
+const { sendUpdatePasswordEmail } = require("../EmailService/updatePassword");
 dotenv.config();
 
 //UPDATE
 
 router.put("/:id", async (req, res) => {
   if (req.body.password) {
+    await sendUpdatePasswordEmail(req.body.email, req.body.password);
     req.body.password = CryptoJs.AES.encrypt(
       req.body.password,
       process.env.PASS

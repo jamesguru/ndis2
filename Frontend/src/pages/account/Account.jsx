@@ -37,10 +37,12 @@ const Account = () => {
       );
     } else {
       await publicRequest.put(`/users/${user.currentUser._id}`,{
+        email:user.currentUser.email,
         password
       });
       setError("");
-      setSuccess("Password has been updated successfully.");
+      setSuccess("Password has been updated successfully. Check your email for the new password.");
+      setPassword("")
     }
   };
 

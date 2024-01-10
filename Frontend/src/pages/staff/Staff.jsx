@@ -125,7 +125,7 @@ const Staff = () => {
         {data.map((shift, index) => (
           <div className={shift?.clockin?.length === 0 && shift?.clockout?.length === 0 || shift?.clockin?.length > 0 && shift?.clockout?.length === 0 ? 'staff_main_card' : 'staff_main_card_none'} key={index}>
             <div className="staff_main_card_date">
-              <span>{moment(shift.date).format("ddd DD")}</span>
+              <span>{moment(shift.date,'DD/MM/YYYY').format("ddd DD")}</span>
             </div>
 
             <div className="staff_main_card_info">
@@ -160,7 +160,7 @@ const Staff = () => {
         {unassignedShifts.slice(0,5).map((shift, index) => (
           <div className={shift.shiftEmail ? 'staff_main_card': 'staff_main_card_unassigned'} key={index}>
             <div className="staff_main_card_date">
-              <span>{moment(shift.date).format("ddd DD")}</span>
+            <span>{moment(shift.date,'DD/MM/YYYY').format("ddd DD")}</span>
             </div>
 
             <div className="staff_main_card_info">

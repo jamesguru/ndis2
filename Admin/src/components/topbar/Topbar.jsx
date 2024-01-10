@@ -13,7 +13,7 @@ export default function Topbar() {
     <div className="topbar">
       <div className="topbarWrapper">
         <div className="topLeft">
-          <span className="logo">AM Tasker Admin</span>
+          <span className="logo">Aim Tasker Admin</span>
         </div>
         <div className="topRight">
           <div className="topbarIconContainer">

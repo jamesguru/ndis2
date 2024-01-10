@@ -40,6 +40,8 @@
     cursor: pointer;
     width: 250px;
   }
-  
+  .error{
+    width: 50%;
+  }
   
   

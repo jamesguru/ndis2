@@ -10,15 +10,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  
   const user = useSelector((state) => state.user);
-
+  const error = useSelector((state) => state.user.error);
   const dispatch = useDispatch();
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleLogin = async () => {
+   
     if (staffID && password) {
       try {
         setLoading(true);
@@ -26,8 +27,9 @@ const Login = () => {
         setLoading(false); // Navigate on successful login
       } catch (error) {
         setLoading(false);
+     
         // Handle login error (e.g., display an error message)
-        setError('You have entered wrong password or staffID.')
+
       }
     }
   };
@@ -72,7 +74,7 @@ const Login = () => {
             {loading ? "loading ..." : "Login"}
             {user.currentUser ? <Navigate to="/staff" /> : ""}
           </span>
-          {error && <span style={{color:'red'}}>{error}</span>}
+          {error && <span style={{color:'red'}}>Please ensure that your staff ID and password are entered correctly before attempting to log in. Double-check your credentials and try again.</span>}
         </form>
       </div>
 

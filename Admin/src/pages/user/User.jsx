@@ -5,13 +5,11 @@ import {
   PermIdentity,
   PhoneAndroid,
   Visibility,
-Description,
-
-  
+  Description,
 } from "@material-ui/icons";
 import "./user.css";
 import { publicRequest, url } from "../../requestMethods";
-import { Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -19,6 +17,9 @@ export default function User() {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [staff, setStaff] = useState({});
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   useEffect(() => {
     const getStaff = async () => {
       try {
@@ -31,10 +32,37 @@ export default function User() {
     getStaff();
   }, [id]);
 
-  const handleView = (doc) =>{
-    window.open(`${url}/files/${doc}`,"_blank","noreferrer")
+  const handleView = (doc) => {
+    window.open(`${url}/files/${doc}`, "_blank", "noreferrer");
+  };
 
-  }
+  const validatePassword = async () => {
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength || !hasUppercase || !hasSpecialCharacter) {
+      setError(
+        "Password must be at least 8 characters long, contain an uppercase letter, and have a special character."
+      );
+    } else {
+      await publicRequest.put(`/users/${staff._id}`, {
+        email: staff.email,
+        password,
+      });
+      setError("");
+      setSuccess(
+        "Password has been updated successfully."
+      );
+      setPassword("");
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    validatePassword();
+
+    // You can add additional logic here, such as submitting the form if the password is valid.
+  };
   return (
     <div className="user">
       <div className="userTitleContainer">
@@ -46,10 +74,8 @@ export default function User() {
       <div className="userContainer">
         <div className="userShow">
           <div className="userShowTop">
-           
             <div className="userShowTopTitle">
               <span className="userShowUsername">{staff.fullname}</span>
-             
             </div>
           </div>
           <div className="userShowBottom">
@@ -79,13 +105,15 @@ export default function User() {
             <div>
               <span className="documents">Documents</span>
 
-              {staff?.documents?.map((doc,index) => 
-              
-              <div className="doc" key={index}>
-                <Description className="visibility_icon" onClick={() => handleView(doc)} />
-                <span>{doc}</span>
-              </div>
-              )}
+              {staff?.documents?.map((doc, index) => (
+                <div className="doc" key={index}>
+                  <Description
+                    className="visibility_icon"
+                    onClick={() => handleView(doc)}
+                  />
+                  <span>{doc}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -136,11 +164,24 @@ export default function User() {
             </div>
             <div className="userUpdateRight">
               <div className="userUpdateUpload">
-              
-                <label htmlFor="file">
-
-                </label>
+                <label htmlFor="file"></label>
                 <input type="file" id="file" style={{ display: "none" }} />
+              </div>
+              <div className="reset">
+                <input
+                  type="text"
+                  className="reset-input"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button className="reset-button" onClick={handleSubmit}>
+                  Reset Password
+                </button>
+                {error && (
+                  <p style={{ color: "red", width: "200px" }}>{error}</p>
+                )}
+                {success && (
+                  <p style={{ color: "green", width: "200px" }}>{success}</p>
+                )}
               </div>
               <button className="userUpdateButton">Update</button>
             </div>

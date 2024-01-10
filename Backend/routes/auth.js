@@ -4,15 +4,28 @@ const CryptoJs = require("crypto-js");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const multer = require('multer');
 const {sendWelcomeEmail}= require("../EmailService/Welcome")
 
 dotenv.config();
 
 // REGISTER
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './files');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now();
+    cb(null, uniqueSuffix + file.originalname);
+  },
+});
 
-router.post("/register", async (req, res) => {
+const upload = multer({ storage: storage });
+
+router.post("/register", upload.array('files', 5),async (req, res) => {
+
   const unsavedPassword = req.body.password;
-
+  const fileNames = req.files.map((file) => file.filename);
   const newUser = User({
     username: req.body.username,
     email: req.body.email,
@@ -21,6 +34,7 @@ router.post("/register", async (req, res) => {
     address: req.body.address,
     staffID: req.body.staffID,
     gender: req.body.gender,
+    documents:fileNames,
     password: CryptoJs.AES.encrypt(
       req.body.password,
       process.env.PASS

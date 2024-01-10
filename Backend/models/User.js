@@ -10,6 +10,7 @@ const UserSchema = mongoose.Schema({
     staffID:{type:String, require:true,unique:true},
     password:{type:String, required:true},
     role:{type:String, default:"user"},
+    documents:{type: Array},
     isActive:{type:Boolean, default:true},
     img:{type:String},
 },{timestamps:true})

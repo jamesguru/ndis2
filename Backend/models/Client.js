@@ -9,6 +9,7 @@ const ClientSchema = mongoose.Schema({
     role:{type:String, default:"client"},
     isActive:{type:Boolean, default:true},
     img:{type:String},
+    documents:{type: Array},
 },{timestamps:true})
 
 module.exports = mongoose.model("Client", ClientSchema);

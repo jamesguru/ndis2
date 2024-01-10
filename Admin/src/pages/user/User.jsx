@@ -4,10 +4,13 @@ import {
   MailOutline,
   PermIdentity,
   PhoneAndroid,
+  Visibility,
+Description,
+
   
 } from "@material-ui/icons";
 import "./user.css";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest, url } from "../../requestMethods";
 import { Link, useLocation} from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -27,6 +30,11 @@ export default function User() {
     };
     getStaff();
   }, [id]);
+
+  const handleView = (doc) =>{
+    window.open(`${url}/files/${doc}`,"_blank","noreferrer")
+
+  }
   return (
     <div className="user">
       <div className="userTitleContainer">
@@ -66,6 +74,18 @@ export default function User() {
             <div className="userShowInfo">
               <LocationSearching className="userShowIcon" />
               <span className="userShowInfoTitle">{staff.address}</span>
+            </div>
+
+            <div>
+              <span className="documents">Documents</span>
+
+              {staff?.documents?.map((doc,index) => 
+              
+              <div className="doc" key={index}>
+                <Description className="visibility_icon" onClick={() => handleView(doc)} />
+                <span>{doc}</span>
+              </div>
+              )}
             </div>
           </div>
         </div>

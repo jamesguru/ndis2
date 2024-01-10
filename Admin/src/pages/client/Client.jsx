@@ -4,13 +4,14 @@ import {
     MailOutline,
     PermIdentity,
     PhoneAndroid,
-    Publish,
+    Visibility,
+    Description,
   } from "@material-ui/icons";
   import "./client.css";
   import { Link, useLocation} from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { publicRequest } from "../../requestMethods";
+import { publicRequest,url } from "../../requestMethods";
   
   export default function Client() {
     const location = useLocation();
@@ -27,6 +28,11 @@ import { publicRequest } from "../../requestMethods";
     };
     getClient();
   }, [id]);
+
+  const handleView = (doc) =>{
+    window.open(`${url}/files/${doc}`,"_blank","noreferrer")
+
+  }
     return (
       <div className="user">
       <div className="userTitleContainer">
@@ -68,6 +74,17 @@ import { publicRequest } from "../../requestMethods";
               <span className="userShowInfoTitle">{client.address}</span>
             </div>
           </div>
+          <div>
+           <span className="documents">Documents</span>
+
+              {client?.documents?.map((doc,index) => 
+              
+              <div className="doc" key={index}>
+                <Description className="visibility_icon" onClick={() => handleView(doc)} />
+                <span>{doc}</span>
+              </div>
+              )}
+            </div>
         </div>
         <div className="userUpdate">
           <span className="userUpdateTitle">Edit</span>

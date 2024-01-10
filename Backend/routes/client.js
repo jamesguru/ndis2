@@ -1,13 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const Client = require("../models/Client");
+const multer = require('multer');
 
 
 // CREATE
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './files');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now();
+    cb(null, uniqueSuffix + file.originalname);
+  },
+});
 
-router.post("/", async (req, res) => {
+const upload = multer({ storage: storage });
+router.post("/", upload.array('files', 5), async (req, res) => {
+  const fileNames = req.files.map((file) => file.filename);
+  const newClient = Client({
+    username: req.body.username,
+    email: req.body.email,
+    fullname: req.body.fullname,
+    phone: req.body.phone,
+    address: req.body.address,
+    gender: req.body.gender,
+    documents:fileNames,
+    
+  });
 
-  const newClient = Client(req.body);
   try {
     const client = await newClient.save();
     res.status(201).json(client);

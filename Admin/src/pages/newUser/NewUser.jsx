@@ -3,20 +3,39 @@ import "./newUser.css";
 import { publicRequest } from "../../requestMethods";
 
 export default function NewUser() {
-  const [inputs, setInputs] = useState({});
-  const [success, setSuccess]=useState(false)
+  
+  const [success, setSuccess]=useState(false);
+  const [username, setUsername]=useState("");
+  const [fullname, setFullname]=useState("");
+  const [password, setPassword]= useState("");
+  const [email, setEmail]=useState("");
+  const [phone, setPhone]=useState("");
+  const [address, setAdrress]=useState("");
+  const [staffID, setStaffID]= useState("");
+  const [gender, setGender]=useState("");
   const [files, setFile] = useState([]);
 
-  const handleChange = (e) => {
-    setInputs((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  };
+ 
 
   const handleClick = async (e) =>{
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('username',username);
+    formData.append('fullname',fullname);
+    formData.append('password',password);
+    formData.append('email',email);
+    formData.append('phone',phone);
+    formData.append('address',address);
+    formData.append('gender',gender);
+    formData.append('staffID',staffID);
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
     try {
-      await publicRequest.post('/auth/register',inputs);  
+      await publicRequest.post('/auth/register',formData,{
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });  
       setSuccess(true); 
       window.location.reload()
     } catch (error) {
@@ -25,22 +44,7 @@ export default function NewUser() {
     
   }
 
-  const submitPDF = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-    const result = await publicRequest.post("/users/upload",
-      formData,
-      {
-       headers:{"Content-Type": "multipart/form-data"} 
-      }
-    );
-
-    console.log(result)
-
-  }
+  
 
   return (
     <div className="newUser">
@@ -48,53 +52,56 @@ export default function NewUser() {
       <form className="newUserForm">
         <div className="newUserItem">
           <label>Username</label>
-          <input type="text" placeholder="john" name="username"  onChange={handleChange}/>
+          <input type="text" placeholder="john" name="username"  onChange={(e) => setUsername(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Full Name</label>
-          <input type="text" placeholder="John Smith" name="fullname"  onChange={handleChange}/>
+          <input type="text" placeholder="John Smith" name="fullname"  onChange={(e) => setFullname(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Email</label>
-          <input type="email" placeholder="john@gmail.com" name="email" onChange={handleChange} />
+          <input type="email" placeholder="john@gmail.com" name="email" onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className="newUserItem">
           <label>Password</label>
-          <input type="password" placeholder="password" name="password"  onChange={handleChange}/>
+          <input type="password" placeholder="password" name="password"  onChange={(e) => setPassword(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Phone</label>
-          <input type="text" placeholder="+1 123 456 78" name="phone"  onChange={handleChange}/>
+          <input type="text" placeholder="+1 123 456 78" name="phone"  onChange={(e) => setPhone(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Address</label>
-          <input type="text" placeholder="New York | USA" name="address"  onChange={handleChange} />
+          <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value)} />
         </div>
         <div className="newUserItem">
           <label>Staff ID</label>
-          <input type="text" placeholder="AP100" name="staffID"  onChange={handleChange}/>
+          <input type="text" placeholder="AP100" name="staffID"  onChange={(e) => setStaffID(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Gender</label>
           <div className="newUserGender">
-            <input type="radio" name="gender" id="male" value="Male" onChange={handleChange}/>
+            <input type="radio" name="gender" id="male" value="Male" onChange={(e) => setGender(e.target.value)}/>
             <label for="male">Male</label>
-            <input type="radio" name="gender" id="female" value="Female" onChange={handleChange}/>
+            <input type="radio" name="gender" id="female" value="Female" onChange={(e) => setGender(e.target.value)}/>
             <label for="female">Female</label>
-            <input type="radio" name="gender" id="other" value="other" onChange={handleChange}/>
+            <input type="radio" name="gender" id="other" value="other" onChange={(e) => setGender(e.target.value)}/>
             <label for="other">Other</label>
           </div>
         </div>
+        <div className="newUserItem">
         <input type="file" onChange={(e) => setFile(e.target.files)} multiple/>
+        <span>Select staff's documents</span>
+        </div>
         <div className="newUserItem">
           <label>Active</label>
-          <select className="newUserSelect" name="active" id="active" onChange={handleChange}>
+          <select className="newUserSelect" name="active" id="active" >
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
         <button className="newUserButton" onClick={handleClick}>Create</button>
-        <button onClick={submitPDF}>Submit File</button>
+        
       </form>
     </div>
   );

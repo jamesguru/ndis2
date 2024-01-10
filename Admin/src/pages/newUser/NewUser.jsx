@@ -5,6 +5,7 @@ import { publicRequest } from "../../requestMethods";
 export default function NewUser() {
   const [inputs, setInputs] = useState({});
   const [success, setSuccess]=useState(false)
+  const [files, setFile] = useState([]);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -22,6 +23,23 @@ export default function NewUser() {
       setSuccess(false);
     }
     
+  }
+
+  const submitPDF = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+    const result = await publicRequest.post("/users/upload",
+      formData,
+      {
+       headers:{"Content-Type": "multipart/form-data"} 
+      }
+    );
+
+    console.log(result)
+
   }
 
   return (
@@ -67,6 +85,7 @@ export default function NewUser() {
             <label for="other">Other</label>
           </div>
         </div>
+        <input type="file" onChange={(e) => setFile(e.target.files)} multiple/>
         <div className="newUserItem">
           <label>Active</label>
           <select className="newUserSelect" name="active" id="active" onChange={handleChange}>
@@ -75,6 +94,7 @@ export default function NewUser() {
           </select>
         </div>
         <button className="newUserButton" onClick={handleClick}>Create</button>
+        <button onClick={submitPDF}>Submit File</button>
       </form>
     </div>
   );

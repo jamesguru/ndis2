@@ -13,6 +13,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/files", express.static("files"));
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", userRoute);

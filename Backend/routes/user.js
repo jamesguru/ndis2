@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
 const CryptoJs = require("crypto-js");
+const multer = require('multer');
 const User = require("../models/User");
 const {
   verifyToken,
@@ -100,6 +101,31 @@ router.get("/stats", async (req, res) => {
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json(error);
+  }
+});
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './files');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now();
+    cb(null, uniqueSuffix + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+
+
+router.post('/upload', upload.array('files', 5), async (req, res) => {
+  try {
+    const fileNames = req.files.map((file) => file.filename);
+    console.log('Uploaded files in array:', fileNames);
+    res.status(200).json({ message: 'Files uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading files:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

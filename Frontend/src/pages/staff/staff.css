@@ -185,6 +185,42 @@ th{
 @media only screen and (max-width: 768px) {
     .staff{
         margin: 20px;
+      
+    }
+
+    .staff_main_card{
+        width: auto;
+    }
+
+    .staff_main_card_date span{
+        font-weight: 900;
+        margin: 2px;
+        font-size: 15px;
+        color: rgb(118, 142, 172);
+        font-family: "Roboto";
+       
+    }
+
+    .staff_main_card_info{
+        width: 30%;
+        margin: 10px 0px;
+    }
+
+    .staff_main_card_info span:nth-child(1){
+
+        font-size: 13px;
+        font-weight: 900;
+    
+    }
+
+    .staff_main_card_info span:nth-child(2){
+
+        font-size: 12px;
+    
+    }
+
+    .shift-location-time{
+        width: 100px;
     }
     /* Add more responsive adjustments as needed */
 }

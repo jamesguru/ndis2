@@ -17,7 +17,6 @@ export default function User() {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [staff, setStaff] = useState({});
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   useEffect(() => {
@@ -37,6 +36,23 @@ export default function User() {
   };
 
   const validatePassword = async () => {
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+      const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const numericChars = '0123456789';
+      const specialChars = '!@#$%^&*()-=_+[]{}|;:,.<>?';
+
+      // Combine all character sets
+      const allChars = lowercaseChars + uppercaseChars + numericChars + specialChars;
+
+      // Set the desired password length
+      const passwordLength = 12; // You can adjust the length as needed
+
+      // Generate the password
+      let password = '';
+      for (let i = 0; i < passwordLength; i++) {
+        const randomIndex = Math.floor(Math.random() * allChars.length);
+        password += allChars.charAt(randomIndex);
+      }
     const minLength = 8;
     const hasUppercase = /[A-Z]/.test(password);
     const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
@@ -54,7 +70,7 @@ export default function User() {
       setSuccess(
         "Password has been updated successfully."
       );
-      setPassword("");
+      
     }
   };
   const handleSubmit = (e) => {
@@ -168,11 +184,6 @@ export default function User() {
                 <input type="file" id="file" style={{ display: "none" }} />
               </div>
               <div className="reset">
-                <input
-                  type="text"
-                  className="reset-input"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
                 <button className="reset-button" onClick={handleSubmit}>
                   Reset Password
                 </button>

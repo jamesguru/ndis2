@@ -7,7 +7,6 @@ export default function NewUser() {
   const [success, setSuccess]=useState(false);
   const [username, setUsername]=useState("");
   const [fullname, setFullname]=useState("");
-  const [password, setPassword]= useState("");
   const [email, setEmail]=useState("");
   const [phone, setPhone]=useState("");
   const [address, setAdrress]=useState("");
@@ -15,10 +14,22 @@ export default function NewUser() {
   const [gender, setGender]=useState("");
   const [files, setFile] = useState([]);
 
- 
-
   const handleClick = async (e) =>{
-    e.preventDefault();
+      e.preventDefault();
+      const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+      const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const numericChars = '0123456789';
+      const specialChars = '!@#$%^&*()-=_+[]{}|;:,.<>?';
+      // Combine all character sets
+      const allChars = lowercaseChars + uppercaseChars + numericChars + specialChars;
+      // Set the desired password length
+      const passwordLength = 12; // You can adjust the length as needed
+      // Generate the password
+      let password = '';
+      for (let i = 0; i < passwordLength; i++) {
+        const randomIndex = Math.floor(Math.random() * allChars.length);
+        password += allChars.charAt(randomIndex);
+      }
     const formData = new FormData();
     formData.append('username',username);
     formData.append('fullname',fullname);
@@ -61,10 +72,6 @@ export default function NewUser() {
         <div className="newUserItem">
           <label>Email</label>
           <input type="email" placeholder="john@gmail.com" name="email" onChange={(e) => setEmail(e.target.value)} />
-        </div>
-        <div className="newUserItem">
-          <label>Password</label>
-          <input type="password" placeholder="password" name="password"  onChange={(e) => setPassword(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Phone</label>

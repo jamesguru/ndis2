@@ -5,6 +5,7 @@ import { publicRequest } from "../../requestMethods";
 export default function NewUser() {
   
   const [success, setSuccess]=useState(false);
+  const [loading, setLoading]=useState(false);
   const [username, setUsername]=useState("");
   const [fullname, setFullname]=useState("");
   const [email, setEmail]=useState("");
@@ -16,6 +17,7 @@ export default function NewUser() {
 
   const handleClick = async (e) =>{
       e.preventDefault();
+      setLoading(true);
       const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
       const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       const numericChars = '0123456789';
@@ -49,8 +51,10 @@ export default function NewUser() {
       });  
       setSuccess(true); 
       window.location.reload()
+      setLoading(false)
     } catch (error) {
       setSuccess(false);
+      setLoading(false);
     }
     
   }
@@ -107,8 +111,7 @@ export default function NewUser() {
             <option value="no">No</option>
           </select>
         </div>
-        <button className="newUserButton" onClick={handleClick}>Create</button>
-        
+        <button className="newUserButton" onClick={handleClick}>{loading ? 'Loading...':'Create'}</button>   
       </form>
     </div>
   );

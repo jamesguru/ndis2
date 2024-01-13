@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function NewClient() {
   
   const [success, setSuccess]=useState(false);
+  const [loading, setLoading]=useState(false);
   const [username, setUsername]=useState("");
   const [fullname, setFullname]=useState("");
   const [password, setPassword]= useState("");
@@ -16,6 +17,7 @@ export default function NewClient() {
 
   const handleClick = async (e) =>{
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
     formData.append('username',username);
     formData.append('fullname',fullname);
@@ -30,13 +32,16 @@ export default function NewClient() {
       formData.append('files', files[i]);
     }
     try {
+      setLoading(true);
       await publicRequest.post('/clients',formData,{
         headers: { 'Content-Type': 'multipart/form-data' },
       });  
       setSuccess(true); 
       window.location.reload()
+      setLoading(false);
     } catch (error) {
       setSuccess(false);
+      setLoading(false);
     }
     
     
@@ -90,7 +95,7 @@ export default function NewClient() {
             <option value="no">No</option>
           </select>
         </div>
-        <button className="newUserButton" onClick={handleClick}>Create</button>
+        <button className="newUserButton" onClick={handleClick}>{loading ? 'Loading...' : 'Create'}</button>
         
       </form>
   </div>

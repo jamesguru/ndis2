@@ -96,7 +96,7 @@ export default function NewClient() {
           </select>
         </div>
         <button className="newUserButton" onClick={handleClick}>{loading ? 'Loading...' : 'Create'}</button>
-        
+        <span>{loading ? 'Loading ...' : ''}</span>
       </form>
   </div>
   );

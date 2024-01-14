@@ -46,10 +46,11 @@ export default function NewUser() {
       formData.append('files', files[i]);
     }
     try {
+      setSuccess(true); 
       await publicRequest.post('/auth/register',formData,{
         headers: { 'Content-Type': 'multipart/form-data' },
       });  
-      setSuccess(true); 
+    
       window.location.reload()
       setLoading(false)
     } catch (error) {
@@ -112,6 +113,7 @@ export default function NewUser() {
           </select>
         </div>
         <button className="newUserButton" onClick={handleClick}>{loading ? 'Loading...':'Create'}</button>   
+        <span>{loading ? 'Loading ...' : ''}</span>
       </form>
     </div>
   );

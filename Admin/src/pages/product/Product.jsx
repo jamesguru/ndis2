@@ -21,6 +21,7 @@ export default function Product() {
   const [staffs, setStaffs] = useState([]);
   const [error, setError] = useState("");
   const shiftId = location.pathname.split("/")[2];
+  const [inputs, setInputs] = useState({});
 
   useEffect(() => {
     const getActivity = async () => {
@@ -47,6 +48,11 @@ export default function Product() {
     getStaffs();
   }, []);
 
+  const handleChange = (e) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyCeQ-SAYDNxH277bfJbNjed0Mqkik8bofo",
     libraries,
@@ -116,6 +122,18 @@ export default function Product() {
 
   }
 
+  const handleUpdate = async(e) =>{
+    e.preventDefault();
+    if(inputs){
+      try {
+        await publicRequest.put(`/shifts/${shift._id}`,inputs);
+        window.location.reload();
+      } catch (error) {
+        
+      }
+    }
+  }
+
   return (
     <div className="product">
     {loading ? <span>Loading ...</span> :
@@ -136,24 +154,27 @@ export default function Product() {
             </li>
             <li>
               <strong>Location: </strong>
-              {shift.location}
+              <input onChange={handleChange} name="location" type="text" className="input-edit" placeholder={shift.location} />
             </li>
             <li>
               <strong>Date and Time: </strong>
-              {shift.date} {shift.time}
+              <input  onChange={handleChange} name="date"type="text" className="input-edit" placeholder={shift.date} />
+              <input  onChange={handleChange} name="time" type="text" className="input-edit" placeholder={shift.time} />
+           
             </li>
             <li>
-              <strong>Type:</strong> {shift.type}
+              <strong>Type:</strong> 
+              <input  onChange={handleChange} name="type" type="text" className="input-edit" placeholder={shift.type} />
             </li>
             <li>
-              <strong>Duration:</strong> {shift.duration}
+              <strong>Duration:</strong>
+              <input  onChange={handleChange} name="duration" type="text" className="input-edit" placeholder={shift.duration} /> 
             </li>
             <li>
-              <strong>Assigned To:</strong> {shift.staffEmail}
+              <strong>Assigned To:</strong> 
+             {shift.staffEmail}
             </li>
-            <li>
-              <strong>Pending:</strong> Ongoing
-            </li>
+            
             <li>
               <strong>Clock In:</strong>
               {shift?.clockin?.map((clock, index) => (
@@ -185,8 +206,11 @@ export default function Product() {
               ))}
             </li>
             <li>
-              <strong>Notes:</strong>{shift.notes}
+              <strong>Notes:</strong>
+              <textarea  className="shift-textarea" name="" id="" cols="30" rows="10" placeholder={shift.notes}></textarea>
             </li>
+
+            <button className="update-shift" onClick={handleUpdate}>Update</button>
           </ul>
           
         </div>

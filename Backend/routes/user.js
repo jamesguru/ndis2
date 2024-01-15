@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
 const CryptoJs = require("crypto-js");
-const multer = require('multer');
+const multer = require("multer");
 const User = require("../models/User");
 const {
   verifyToken,
@@ -10,13 +10,15 @@ const {
   verifyTokenAndAuthorization,
 } = require("../middlewares/verifyToken");
 const { sendUpdatePasswordEmail } = require("../EmailService/updatePassword");
+const { sendResetPasswordEmail } = require("../EmailService/resetPassword");
 dotenv.config();
 
 //UPDATE
 
 router.put("/:id", async (req, res) => {
+  let unencryptedPassword = req.body.password;
   if (req.body.password) {
-    await sendUpdatePasswordEmail(req.body.email, req.body.password);
+    password = req.body.password;
     req.body.password = CryptoJs.AES.encrypt(
       req.body.password,
       process.env.PASS
@@ -29,7 +31,8 @@ router.put("/:id", async (req, res) => {
       { $set: req.body },
       { new: true }
     );
-
+  
+      await sendUpdatePasswordEmail(req.body.email, unencryptedPassword);
     res.status(201).json(updatedUser);
   } catch (error) {
     res.status(500).json(error);
@@ -103,5 +106,76 @@ router.get("/stats", async (req, res) => {
     res.status(500).json(error);
   }
 });
+
+// reset password
+
+router.post("/reset", async (req, res) => {
+  try {
+    const user = await User.findOne({email: req.body.email});
+    if (!user) {
+      return res.status(401).json("Staff not found");
+    }
+    await sendResetPasswordEmail(req.body.email);
+    res.status(200).json('Reset link has been sent');
+  } catch (error) {
+    res.status(500).json("Something went wrong.");
+  }
+});
+
+router.post("/update-password", async(req,res) =>{
+  try {
+    const user = await User.findOne({staffID:req.body.staffID});
+    if (!user) {
+      return res.status(404).json("Staff not found");
+    }
+
+    function generateStrongPassword(length = 12) {
+      const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+      const numbers = '0123456789';
+      const specialCharacters = '!@#?';
+    
+      const allCharacters = uppercaseLetters + lowercaseLetters + numbers + specialCharacters;
+    
+      let password = '';
+    
+      // Ensure at least one character from each category
+      password += getRandomCharacter(uppercaseLetters);
+      password += getRandomCharacter(lowercaseLetters);
+      password += getRandomCharacter(numbers);
+      password += getRandomCharacter(specialCharacters);
+    
+      // Fill the rest of the password length
+      for (let i = password.length; i < length; i++) {
+        password += getRandomCharacter(allCharacters);
+      }
+    
+      return password;
+    }  
+    function getRandomCharacter(characterSet) {
+      const randomIndex = Math.floor(Math.random() * characterSet.length);
+      return characterSet.charAt(randomIndex);
+    } 
+    // Example: Generate a strong password with default length (12 characters)
+    const strongPassword = generateStrongPassword();
+
+    const encryptedPassword = CryptoJs.AES.encrypt(
+      strongPassword,
+      process.env.PASS
+    ).toString();
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { $set: {password: encryptedPassword} },
+      {new: true}
+    );
+ 
+      await sendUpdatePasswordEmail(user.email,strongPassword);
+    res.status(201).json(updatedUser)
+
+  } catch (error) {
+    res.status(500).json('Something went wrong');
+  }
+})
 
 module.exports = router;

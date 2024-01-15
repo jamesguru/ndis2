@@ -10,6 +10,8 @@ import Shift from "./pages/shift/Shift";
 import Account from "./pages/account/Account";
 import Statement from "./pages/statement/Statement";
 import Report from "./pages/report/Report";
+import ResetPassword from "./pages/resetPassword/ResetPassword";
+import UpdatePassword from "./pages/updatePassword/UpdatePassword";
 function App() {
   const user = useSelector((state) => state.user);
   
@@ -23,7 +25,14 @@ function App() {
           path: "/login",
           element: <Login />,
         },
-    
+        {
+          path: "/forgot-password",
+          element: <ResetPassword />,
+        },
+        {
+          path: "/reset/KsJhRzLbWgVn4fE2aZpXqYcDxuIo0m",
+          element: <UpdatePassword />,
+        },
         {
           path: "/admin",
           element: <Admin />,

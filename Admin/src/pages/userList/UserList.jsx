@@ -8,10 +8,28 @@ import { publicRequest } from "../../requestMethods";
 export default function UserList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [staffID,setStaffID] = useState(null);
 
-  const handleDelete = async (id) => {};
-
-  const handleUpdate = async (id) => {};
+  const delelePemantly = async () => {
+ 
+    if(staffID){
+      try {
+        await publicRequest.delete(`/users/${staffID}`)
+        window.location.reload();     
+      } catch (error) {       
+      }
+    }
+  }
+  const handleDelete = (id) => {
+    setOpen(true);
+    setStaffID(id);
+    
+  };
+  const handleCancel = (e) =>{
+    e.preventDefault();
+    setOpen(!open)
+  }
 
   useEffect(() => {
     const getItems = async () => {
@@ -50,7 +68,7 @@ export default function UserList() {
 
             <DeleteOutline
               className="userListDelete"
-              onClick={() => handleUpdate(params.row._id)}
+              onClick={() => handleDelete(params.row._id)}
             />
           </>
         );
@@ -70,6 +88,15 @@ export default function UserList() {
         pageSize={20}
         checkboxSelection
       />}
+
+
+{open && <div className="modal">
+        <span className="modal-header">Are you sure you want to delete?</span>
+        <div className="cancel-delete">
+          <button onClick={handleCancel}>Cancel</button>
+          <button onClick={delelePemantly}>Confirm</button>
+        </div>
+      </div>}
     </div>
   );
 }

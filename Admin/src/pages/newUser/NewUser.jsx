@@ -1,9 +1,7 @@
 import { useState } from "react";
 import "./newUser.css";
 import { publicRequest } from "../../requestMethods";
-
 export default function NewUser() {
-  
   const [success, setSuccess]=useState(false);
   const [loading, setLoading]=useState(false);
   const [username, setUsername]=useState("");
@@ -68,36 +66,36 @@ export default function NewUser() {
       <form className="newUserForm">
         <div className="newUserItem">
           <label>Username</label>
-          <input type="text" placeholder="john" name="username"  onChange={(e) => setUsername(e.target.value)}/>
+          <input type="text" placeholder="john" name="username"  onChange={(e) => setUsername(e.target.value.replace(/\s/g, ''))}/>
         </div>
         <div className="newUserItem">
           <label>Full Name</label>
-          <input type="text" placeholder="John Smith" name="fullname"  onChange={(e) => setFullname(e.target.value)}/>
+          <input type="text" placeholder="John Smith" name="fullname"  onChange={(e) => setFullname(e.target.value.replace(/\s/g, ''))}/>
         </div>
         <div className="newUserItem">
           <label>Email</label>
-          <input type="email" placeholder="john@gmail.com" name="email" onChange={(e) => setEmail(e.target.value)} />
+          <input type="email" placeholder="john@gmail.com" name="email" onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))} />
         </div>
         <div className="newUserItem">
           <label>Phone</label>
-          <input type="text" placeholder="+1 123 456 78" name="phone"  onChange={(e) => setPhone(e.target.value)}/>
+          <input type="text" placeholder="+1 123 456 78" name="phone"  onChange={(e) => setPhone(e.target.value.replace(/\s/g, ''))}/>
         </div>
         <div className="newUserItem">
           <label>Address</label>
-          <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value)} />
+          <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value.replace(/\s/g, ''))} />
         </div>
         <div className="newUserItem">
           <label>Staff ID</label>
-          <input type="text" placeholder="AP100" name="staffID"  onChange={(e) => setStaffID(e.target.value)}/>
+          <input type="text" placeholder="AP100" name="staffID"  onChange={(e) => setStaffID(e.target.value.replace(/\s/g, ''))}/>
         </div>
         <div className="newUserItem">
           <label>Gender</label>
           <div className="newUserGender">
-            <input type="radio" name="gender" id="male" value="Male" onChange={(e) => setGender(e.target.value)}/>
+            <input type="radio" name="gender" id="male" value="Male" onChange={(e) => setGender(e.target.value.replace(/\s/g, ''))}/>
             <label for="male">Male</label>
-            <input type="radio" name="gender" id="female" value="Female" onChange={(e) => setGender(e.target.value)}/>
+            <input type="radio" name="gender" id="female" value="Female" onChange={(e) => setGender(e.target.value.replace(/\s/g, ''))}/>
             <label for="female">Female</label>
-            <input type="radio" name="gender" id="other" value="other" onChange={(e) => setGender(e.target.value)}/>
+            <input type="radio" name="gender" id="other" value="other" onChange={(e) => setGender(e.target.value.replace(/\s/g, ''))}/>
             <label for="other">Other</label>
           </div>
         </div>

@@ -43,5 +43,9 @@
   .error{
     width: 50%;
   }
+  .forgot-password{
+    text-decoration: underline;
+    cursor: pointer;
+  }
   
   

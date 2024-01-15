@@ -20,7 +20,7 @@ const Account = () => {
     navigate("/login");
   };
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    setPassword(e.target.value.replace(/\s/g, ''));
   };
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);

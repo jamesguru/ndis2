@@ -4,6 +4,28 @@
   position: relative;
 }
 
+.input-edit{
+  padding: 10px;
+  display: block;
+  margin: 10px;
+  width: 250px;
+}
+
+.shift-textarea{
+  display: block;
+  width: 250px;
+}
+
+.update-shift{
+  background-color: teal;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  margin: 20px;
+  padding: 10px;
+}
+
 .productTitleContainer {
   display: flex;
   align-items: center;

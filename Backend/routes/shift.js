@@ -39,6 +39,21 @@ router.get("/", async (req, res) => {
   }
 });
 
+// UPDATE SHIFT
+
+router.put("/:id", async (req, res) => {
+  try {
+    const shift = await Shift.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(201).json(shift);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 // GET USERS SHIFT
 router.post("/me", async (req, res) => {
   

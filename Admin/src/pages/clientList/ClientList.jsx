@@ -8,6 +8,8 @@ import { publicRequest } from "../../requestMethods";
 export default function ClientList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [clientID,setClientID] = useState(null);
 
   useEffect(() => {
     const getItems = async () => {
@@ -25,8 +27,29 @@ export default function ClientList() {
     getItems();
   }, []);
   const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+    setOpen(true);
+    setClientID(id);
+    
   };
+
+  const delelePemantly = async () => {
+    
+    if(clientID){
+      try {
+
+        await publicRequest.delete(`/clients/${clientID}`)
+        window.location.reload();
+        
+      } catch (error) {
+        
+      }
+    }
+  }
+
+  const handleCancel = (e) =>{
+    e.preventDefault();
+    setOpen(!open)
+  }
 
   const columns = [
     { field: "_id", headerName: "ID", width: 90 },
@@ -47,7 +70,7 @@ export default function ClientList() {
             </Link>
             <DeleteOutline
               className="userListDelete"
-              onClick={() => handleDelete(params.row.id)}
+              onClick={() => handleDelete(params.row._id)}
             />
           </>
         );
@@ -66,6 +89,14 @@ export default function ClientList() {
         pageSize={8}
         checkboxSelection
       />}
+
+      {open && <div className="modal">
+        <span className="modal-header">Are you sure you want to delete?</span>
+        <div className="cancel-delete">
+          <button onClick={handleCancel}>Cancel</button>
+          <button onClick={delelePemantly}>Confirm</button>
+        </div>
+      </div>}
     </div>
   );
 }

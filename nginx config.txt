@@ -1,0 +1,8 @@
+sudo nano /etc/nginx/nginx.conf
+http {
+    # ... other configuration settings ...
+
+    client_max_body_size 1040M;
+
+    # ... other configuration settings ...
+}

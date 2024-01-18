@@ -4,13 +4,55 @@ import { DeleteOutline } from "@material-ui/icons";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { publicRequest } from "../../requestMethods";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export default function ClientList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [clientID,setClientID] = useState(null);
+  const generatePDF = () => {
+    const pdf = new jsPDF("landscape");
 
+    // Set the title of the document
+    pdf.text("Aim Tasker Clients Report", 15, 15);
+
+    // Set column headers
+    const headers = [
+      "ID",
+      "Full Name",
+      "PHONE",
+      "EMAIL",
+      "ADDRESS",
+      "GENDER",
+    ];
+
+    // Set data for the table
+    const tableData = data.map((item) => [
+      item._id,
+      item.fullname,
+      item.phone,
+      item.email,
+      item.address,
+      item.gender,
+    ]);
+
+    // Auto page breaks and table styling
+    pdf.autoTable({
+      startY: 20,
+      head: [headers],
+      body: tableData,
+      styles: {
+        fontSize: 10,
+        cellWidth: "wrap",
+      },
+      margin: { top: 20 },
+    });
+
+    // Save the PDF with a specific name
+    pdf.save("clients_report.pdf");
+  };
   useEffect(() => {
     const getItems = async () => {
       try {
@@ -81,6 +123,7 @@ export default function ClientList() {
   return (
     <div className="userList">
       <h3 className="incidences-header">All Clients</h3>
+      <button onClick={generatePDF} className="generatepdf">Generate Pdf</button>
      { loading ? <span>Loading...</span>:<DataGrid
         rows={data}
         disableSelectionOnClick

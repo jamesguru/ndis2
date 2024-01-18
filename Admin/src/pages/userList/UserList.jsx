@@ -4,39 +4,80 @@ import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { publicRequest } from "../../requestMethods";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export default function UserList() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [staffID,setStaffID] = useState(null);
+  const [staffID, setStaffID] = useState(null);
+
+  const generatePDF = () => {
+    const pdf = new jsPDF("landscape");
+
+    // Set the title of the document
+    pdf.text("Aim Tasker Staff Report", 15, 15);
+
+    // Set column headers
+    const headers = [
+      "ID",
+      "Full Name",
+      "PHONE",
+      "Staff ID",
+      "EMAIL",
+      "ADDRESS",
+      "GENDER",
+    ];
+
+    // Set data for the table
+    const tableData = data.map((item) => [
+      item._id,
+      item.fullname,
+      item.phone,
+      item.staffID,
+      item.email,
+      item.address,
+      item.gender,
+    ]);
+
+    // Auto page breaks and table styling
+    pdf.autoTable({
+      startY: 20,
+      head: [headers],
+      body: tableData,
+      styles: {
+        fontSize: 10,
+        cellWidth: "wrap",
+      },
+      margin: { top: 20 },
+    });
+
+    // Save the PDF with a specific name
+    pdf.save("staffs_report.pdf");
+  };
 
   const delelePemantly = async () => {
- 
-    if(staffID){
+    if (staffID) {
       try {
-        await publicRequest.delete(`/users/${staffID}`)
-        window.location.reload();     
-      } catch (error) {       
-      }
+        await publicRequest.delete(`/users/${staffID}`);
+        window.location.reload();
+      } catch (error) {}
     }
-  }
+  };
   const handleDelete = (id) => {
     setOpen(true);
     setStaffID(id);
-    
   };
-  const handleCancel = (e) =>{
+  const handleCancel = (e) => {
     e.preventDefault();
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
   useEffect(() => {
     const getItems = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const res = await publicRequest.get("/users");
         setData(res.data);
         setLoading(false);
@@ -81,24 +122,29 @@ export default function UserList() {
   return (
     <div className="userList">
       <h3 className="incidences-header">All Staffs</h3>
-      {loading ? <span>Loading ...</span> : 
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        getRowId={(row) => row._id}
-        pageSize={20}
-        checkboxSelection
-      />}
+      <button onClick={generatePDF} className="generatepdf">Generate Pdf</button>
+      {loading ? (
+        <span>Loading ...</span>
+      ) : (
+        <DataGrid
+          rows={data}
+          disableSelectionOnClick
+          columns={columns}
+          getRowId={(row) => row._id}
+          pageSize={20}
+          checkboxSelection
+        />
+      )}
 
-
-{open && <div className="modal">
-        <span className="modal-header">Are you sure you want to delete?</span>
-        <div className="cancel-delete">
-          <button onClick={handleCancel}>Cancel</button>
-          <button onClick={delelePemantly}>Confirm</button>
+      {open && (
+        <div className="modal">
+          <span className="modal-header">Are you sure you want to delete?</span>
+          <div className="cancel-delete">
+            <button onClick={handleCancel}>Cancel</button>
+            <button onClick={delelePemantly}>Confirm</button>
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }

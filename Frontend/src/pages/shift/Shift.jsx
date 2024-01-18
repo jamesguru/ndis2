@@ -277,6 +277,7 @@ const Shift = () => {
                   onChange={(e) => setNotes(e.target.value)}
                 ></textarea>
                 {error && <span style={{color:"red"}}>Make sure you have filled all fields</span>}
+                {error && <span style={{color:"red"}}>You should double click.</span>}
                 <button onClick={handleAddNotes}>Submit</button>
                 
               </div>

@@ -21,9 +21,11 @@ const Login = () => {
           password,
         });
         localStorage.setItem("staff", JSON.stringify(res.data));
-        history.push("/home");
         
-        setFailed(false);
+        if(res.data && res.data.role === 'admin'){
+          history.push("/home");
+        }   
+        setLoading(false);
       } catch (error) {
         setFailed(true);
         setLoading(false);

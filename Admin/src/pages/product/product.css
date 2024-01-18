@@ -61,6 +61,7 @@
 }
 
 .productTopRight {
+  position: relative;
   padding: 30px;
   margin: 20px;
   -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
@@ -85,7 +86,8 @@
 }
 
 .productInfoBottom {
-  margin-top: 10px;
+
+  margin-top: 40px;
   overflow-y: scroll;
   height: 200px;
 }
@@ -175,6 +177,7 @@
 
 .productButton{
   border: none;
+  margin: 20px;
   padding: 5px;
   display: flex;
   align-items: center;
@@ -187,6 +190,7 @@
 
 table{
   width: 100%;
+  margin: 20px 0px;
 }
 tr{
   height: 50px;

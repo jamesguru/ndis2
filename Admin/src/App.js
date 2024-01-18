@@ -60,7 +60,7 @@ function App() {
               <Route path="/shifts">
                 <ProductList />
               </Route>
-              <Route path="/product/:productId">
+              <Route path="/shift/:shiftId">
                 <Product />
               </Route>
               <Route path="/newproduct">

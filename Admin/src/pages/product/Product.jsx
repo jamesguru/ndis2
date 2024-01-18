@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import "./product.css";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { publicRequest } from "../../requestMethods";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -133,7 +135,41 @@ export default function Product() {
       }
     }
   }
+  const generatePDF = () => {
+    const pdf = new jsPDF("landscape");
 
+    // Set the title of the document
+    pdf.text(`Shift ${shift._id} Case Notes Report`, 15, 15);
+
+    // Set column headers
+    const headers = [
+      "TIME",
+      "EVENT",
+      "NOTES",
+    ];
+
+    // Set data for the table
+    const tableData = shift?.casenotes?.map((item) => [
+      item.time,
+      item.event,
+      item.notes,
+    ]);
+
+    // Auto page breaks and table styling
+    pdf.autoTable({
+      startY: 20,
+      head: [headers],
+      body: tableData,
+      styles: {
+        fontSize: 10,
+        cellWidth: "wrap",
+      },
+      margin: { top: 20 },
+    });
+
+    // Save the PDF with a specific name
+    pdf.save(`shift_${shift._id}_casenotes_report.pdf`);
+  };
   return (
     <div className="product">
     {loading ? <span>Loading ...</span> :
@@ -178,6 +214,10 @@ export default function Product() {
               <strong>Assigned To:</strong> 
              {shift.staffEmail}
             </li>
+            <li>
+              <strong>Notes:</strong>
+              <textarea  className="shift-textarea" name="" id="" cols="30" rows="10" placeholder={shift.notes}></textarea>
+            </li>
             
             <li>
               <strong>Clock In:</strong>
@@ -209,17 +249,16 @@ export default function Product() {
                 </div>
               ))}
             </li>
-            <li>
-              <strong>Notes:</strong>
-              <textarea  className="shift-textarea" name="" id="" cols="30" rows="10" placeholder={shift.notes}></textarea>
-            </li>
+            
 
             <button className="update-shift" onClick={handleUpdate}>Update</button>
           </ul>
           
         </div>
         <div className="productTopRight">
+        <button onClick={generatePDF} className="generatepdf">Generate Case Notes Pdf</button>
           <div className="productInfoBottom">
+          
             <table>
               <tr>
                 <th>Date/Time</th>

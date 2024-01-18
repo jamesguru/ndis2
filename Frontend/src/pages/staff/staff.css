@@ -181,6 +181,12 @@ th{
     width: 250px;
 }
 
+.no-shifts{
+    margin: 20px 0px;
+    background-color: #1dbf730f;
+    padding: 20px;
+}
+
 /* Responsive Styles */
 @media only screen and (max-width: 768px) {
     .staff{

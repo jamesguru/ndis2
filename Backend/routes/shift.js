@@ -133,7 +133,6 @@ router.put("/assign/:id", async (req, res) => {
 
 router.put("/casenote/:id", async (req, res) => {
   const { event, time, notes } = req.body;
-  console.log("hey case notes", event, time,notes)
   try {
     if (event && time && notes) {
       const caseNote = await Shift.findByIdAndUpdate(req.params.id, {
@@ -174,6 +173,7 @@ router.put("/clockout/:id", async (req, res) => {
   try {
     if (time && coords) {
       const clockout = await Shift.findByIdAndUpdate(req.params.id, {
+        $set: {status: "Completed"},
         $push: { clockout: { time, coords, accuracy } },
       });
       res.status(201).json(clockout);

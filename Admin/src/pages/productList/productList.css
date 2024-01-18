@@ -7,6 +7,31 @@
     display: flex;
     align-items: center;
 }
+.filters{
+  margin: 20px;
+}
+
+.filter-header{
+  margin: 0px 20px;
+}
+
+.filters input{
+border-bottom: 1px solid #555;
+padding: 10px;
+margin: 0px 10px;
+outline: none;
+
+}
+
+.filters button{
+    padding: 10px;
+    margin: 0px 20px;
+    border: none;
+    background-color: teal;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
 
 .productListImg {
     width: 32px;

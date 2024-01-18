@@ -122,7 +122,7 @@ const Staff = () => {
         aria-label="Loading Spinner"
         data-testid="loader"
       />
-        {data.map((shift, index) => (
+        {data?.length === 0 ? <h4 className="no-shifts"> No Shifts Assigned To You. Please wait.</h4> : data?.map((shift, index) => (
           <div className={shift?.clockin?.length === 0 && shift?.clockout?.length === 0 || shift?.clockin?.length > 0 && shift?.clockout?.length === 0 ? 'staff_main_card' : 'staff_main_card_none'} key={index}>
             <div className="staff_main_card_date">
               <span>{moment(shift.date,'DD/MM/YYYY').format("ddd DD")}</span>
@@ -146,7 +146,7 @@ const Staff = () => {
             </div>
            
           </div>
-        ))}
+        )) }
 
         <h3 className="shift-header">Bid shifts</h3>
         <ClipLoader
@@ -157,7 +157,7 @@ const Staff = () => {
         aria-label="Loading Spinner"
         data-testid="loader"
       />
-        {unassignedShifts.slice(0,5).map((shift, index) => (
+        {unassignedShifts?.length === 0 ? <h4 className="no-shifts"> No Shifts To Bid. Please wait.</h4> :unassignedShifts.slice(0,5).map((shift, index) => (
           <div className={shift.shiftEmail ? 'staff_main_card': 'staff_main_card_unassigned'} key={index}>
             <div className="staff_main_card_date">
             <span>{moment(shift.date,'DD/MM/YYYY').format("ddd DD")}</span>

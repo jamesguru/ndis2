@@ -137,7 +137,7 @@ router.post("/update-password", async(req,res) =>{
 
     const updatedUser = await User.findByIdAndUpdate(
       user._id,
-      { $set: {password: encryptedPassword} },
+      { $set: {password: encryptedPassword}, },
       {new: true}
     );
  

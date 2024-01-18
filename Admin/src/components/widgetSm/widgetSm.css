@@ -38,10 +38,12 @@
 
 .widgetSmUsername{
     font-weight: 600;
+    width: 150px;
 }
 
 .widgetSmUserTitle{
     font-weight: 300;
+    width: 150px;
 }
 
 .widgetSmButton{

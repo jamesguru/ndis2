@@ -10,6 +10,7 @@ const ShiftSchema = mongoose.Schema(
     staffEmail:{type:String,default:""},
     amount:{type:Number,default:0},
     paid: {type:Number, default:0},
+    status: {type:String, default:'Pending'},
     notes: { type: String },
     clockin: [{
         time:{type:String},

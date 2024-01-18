@@ -1,0 +1,69 @@
+npm install jspdf nodemailer jspdf-autotable
+const jsPDF = require('jspdf');
+
+require('jspdf-autotable');
+const nodemailer = require('nodemailer');
+
+const generatePDF = () => {
+  const data = [
+    { name: 'John', age: 30, city: 'New York' },
+    { name: 'Jane', age: 25, city: 'San Francisco' },
+    { name: 'Bob', age: 35, city: 'Los Angeles' },
+  ];
+
+  const pdf = new jsPDF('landscape', 'a3');
+
+  // Set the title of the document
+  pdf.text('Data Report', 10, 10);
+
+  // Set column headers
+  const headers = ['Name', 'Age', 'City'];
+
+  // Set data for the table
+  const tableData = data.map(item => [item.name, item.age, item.city]);
+
+  // Use autoTable from jspdf-autotable plugin with styles
+  pdf.autoTable({
+    head: [headers],
+    body: tableData,
+    styles: {
+      fontSize: 10,
+      cellWidth: 'wrap',
+    },
+    margin: { top: 20 },
+  });
+
+  return pdf;
+};
+
+const sendEmailWithAttachment = async () => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'your_email@gmail.com',
+      pass: 'your_email_password',
+    },
+  });
+
+  const mailOptions = {
+    from: 'your_email@gmail.com',
+    to: 'recipient_email@example.com',
+    subject: 'Data Report PDF',
+    text: 'Attached is the data report in PDF format.',
+    attachments: [
+      {
+        filename: 'data_report.pdf',
+        content: generatePDF().output('blob'), // Convert PDF to Blob
+      },
+    ],
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
+
+sendEmailWithAttachment();

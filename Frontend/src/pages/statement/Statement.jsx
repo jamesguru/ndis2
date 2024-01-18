@@ -51,7 +51,7 @@ return (
 
       <div className="statement-report">
 
-        <button className="statement-report-btn">Send report</button>
+        <button className="statement-report-btn">Send Time Sheet</button>
         <div className='piechart-card'>
           <PieChart
             data={[
@@ -63,20 +63,7 @@ return (
             animate
           />
         </div>
-        <div className='report_main_card'>
-            <span>Pending Balance</span>
-            <h2>$ 2000</h2>       
-      </div>
-
-      <div className='report_main_card'>
-            <span>Total Earned</span>
-            <h2>$ 200000</h2>
-            
-      </div>
-
-      </div>
-
-      
+      </div>  
   </div>
 );
 };

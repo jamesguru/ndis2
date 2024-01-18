@@ -30,7 +30,7 @@ function App() {
           element: <ResetPassword />,
         },
         {
-          path: "/reset/KsJhRzLbWgVn4fE2aZpXqYcDxuIo0m",
+          path: "/reset/KsJhRzLbWgVn4fE2aZpXqYcDxuIo0mKsJhRzLbWgVn4fE2a",
           element: <UpdatePassword />,
         },
         {

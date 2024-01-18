@@ -13,12 +13,6 @@ const SendShiftAssignmentEmail = async (location,date,time,type,duration,client,
         to: email,
         subject: "You have new shift",
         html: data,
-        attachments: [
-          {
-            filename: "assignment.txt",
-            content: ``,
-          },
-        ],
       };
 
       try {

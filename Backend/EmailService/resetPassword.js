@@ -14,11 +14,6 @@ const sendResetPasswordEmail = async (email) => {
         to: email,
         subject: "Your reset password link",
         html: data,
-        attachments: [
-          {
-            path: attachmentPath,
-          },
-        ],
       };
 
       try {

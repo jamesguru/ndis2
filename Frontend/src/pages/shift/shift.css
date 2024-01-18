@@ -124,6 +124,12 @@ strong{
     justify-content: space-between;
 }
 
+.completed-shift-text{
+    margin: 0px 20px;
+    color: green;
+    font-weight: 900;
+}
+
 .shift_report_btn{
     background-color: red;
     border: none;

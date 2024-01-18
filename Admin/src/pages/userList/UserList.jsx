@@ -4,6 +4,8 @@ import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { publicRequest } from "../../requestMethods";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function UserList() {
   const [data, setData] = useState([]);

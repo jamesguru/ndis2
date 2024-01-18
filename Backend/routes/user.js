@@ -123,44 +123,15 @@ router.post("/reset", async (req, res) => {
 });
 
 router.post("/update-password", async(req,res) =>{
+
   try {
     const user = await User.findOne({staffID:req.body.staffID});
+  
     if (!user) {
       return res.status(404).json("Staff not found");
     }
-
-    function generateStrongPassword(length = 12) {
-      const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
-      const numbers = '0123456789';
-      const specialCharacters = '!@#?';
-    
-      const allCharacters = uppercaseLetters + lowercaseLetters + numbers + specialCharacters;
-    
-      let password = '';
-    
-      // Ensure at least one character from each category
-      password += getRandomCharacter(uppercaseLetters);
-      password += getRandomCharacter(lowercaseLetters);
-      password += getRandomCharacter(numbers);
-      password += getRandomCharacter(specialCharacters);
-    
-      // Fill the rest of the password length
-      for (let i = password.length; i < length; i++) {
-        password += getRandomCharacter(allCharacters);
-      }
-    
-      return password;
-    }  
-    function getRandomCharacter(characterSet) {
-      const randomIndex = Math.floor(Math.random() * characterSet.length);
-      return characterSet.charAt(randomIndex);
-    } 
-    // Example: Generate a strong password with default length (12 characters)
-    const strongPassword = generateStrongPassword();
-
     const encryptedPassword = CryptoJs.AES.encrypt(
-      strongPassword,
+      req.body.password,
       process.env.PASS
     ).toString();
 
@@ -170,7 +141,7 @@ router.post("/update-password", async(req,res) =>{
       {new: true}
     );
  
-      await sendUpdatePasswordEmail(user.email,strongPassword);
+    await sendUpdatePasswordEmail(user.email,req.body.password);
     res.status(201).json(updatedUser)
 
   } catch (error) {

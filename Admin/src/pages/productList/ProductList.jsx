@@ -4,6 +4,8 @@ import { DeleteOutline } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { publicRequest } from "../../requestMethods";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export default function ProductList() {
   const [data, setData] = useState([]);
@@ -25,7 +27,51 @@ export default function ProductList() {
     };
     getShifts();
   }, []);
+  const generatePDF = () => {
+    const pdf = new jsPDF("landscape");
 
+    // Set the title of the document
+    pdf.text("Data Report", 10, 10);
+
+    // Set column headers
+    const headers = [
+      "ID",
+      "DATE",
+      "TIME",
+      "LOCATION",
+      "CLIENT",
+      "DURATION",
+      "STAFF",
+      "NOTES",
+    ];
+
+    // Set data for the table
+    const tableData = data.map((item) => [
+      item._id,
+      item.date,
+      item.time,
+      item.location,
+      item.client,
+      item.duration,
+      item.staffEmail,
+      item.notes,
+    ]);
+
+    // Auto page breaks and table styling
+    pdf.autoTable({
+      startY: 20,
+      head: [headers],
+      body: tableData,
+      styles: {
+        fontSize: 10, // Set the font size for the entire table
+        cellWidth: "wrap", // Set cell width to 'wrap' for automatic width adjustment
+      },
+      margin: { top: 20 },
+    });
+
+    // Save the PDF with a specific name
+    pdf.save("data_report.pdf");
+  };
   const delelePemantly = async () => {
     if (shiftID) {
       try {
@@ -92,6 +138,9 @@ export default function ProductList() {
   return (
     <div className="productList">
       <h3 className="incidences-header">All Shifts</h3>
+      <button className="generatepdf" onClick={generatePDF}>
+        Generate Pdf
+      </button>
       {loading ? (
         <span>Loading ...</span>
       ) : (

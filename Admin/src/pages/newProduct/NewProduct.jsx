@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./newProduct.css";
 import { publicRequest } from "../../requestMethods";
 import { useEffect } from "react";
-
+import moment from 'moment';
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [success, setSuccess] = useState(false);
@@ -25,10 +25,8 @@ export default function NewProduct() {
   }, []);
   const handleClick = async (e) => {
     e.preventDefault();
-    const dateObject = new Date(date);
-    // Use toLocaleDateString to format the date
-    const formattedDate = dateObject.toLocaleDateString('en-AU');
-    console.log(formattedDate)
+    const formattedDate = moment(date).format('DD/MM/YYYY');
+    
     try {
       await publicRequest.post("/shifts", {...inputs, "date":formattedDate});
       setSuccess(true);
@@ -71,6 +69,15 @@ export default function NewProduct() {
             type="text"
             placeholder="AM/PM"
             name="type"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="addProductItem">
+          <label>Client</label>
+          <input
+            type="text"
+            placeholder="James Doe"
+            name="client"
             onChange={handleChange}
           />
         </div>

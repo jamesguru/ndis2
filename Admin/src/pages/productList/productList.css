@@ -1,5 +1,6 @@
 .productList{
     flex: 4;
+    position: relative;
 }
 
 .productListItem{
@@ -77,4 +78,20 @@
     cursor: pointer;
     padding: 10px;
     width: 100px;
+  }
+
+  .generatepdf{
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin: 20px;
+    padding: 10px;
+    border: none;
+    background-color: teal;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 15px;
   }

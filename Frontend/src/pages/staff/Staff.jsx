@@ -64,9 +64,9 @@ const Staff = () => {
 
   const showStatus =(clockIn, clockout)=>{
 
-    if(clockIn.length === 0 && clockout.length === 0){
+    if(clockIn?.length === 0 && clockout?.length === 0){
       return 'Pending'
-    }else if(clockIn.length > 0 && clockout.length === 0){
+    }else if(clockIn?.length > 0 && clockout?.length === 0){
       return 'Ongoing'
     }else{
       return 'Completed'

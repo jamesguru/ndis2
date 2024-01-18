@@ -171,6 +171,10 @@ export default function Product() {
               <input  onChange={handleChange} name="duration" type="text" className="input-edit" placeholder={shift.duration} /> 
             </li>
             <li>
+              <strong>Client:</strong>
+              <input  onChange={handleChange} name="client" type="text" className="input-edit" placeholder={shift?.client} /> 
+            </li>
+            <li>
               <strong>Assigned To:</strong> 
              {shift.staffEmail}
             </li>

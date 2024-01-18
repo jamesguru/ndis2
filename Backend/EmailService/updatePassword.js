@@ -14,11 +14,6 @@ const sendUpdatePasswordEmail = async (email,password) => {
         to: email,
         subject: "You've changed your password.",
         html: data,
-        attachments: [
-          {
-            path: attachmentPath,
-          },
-        ],
       };
 
       try {

@@ -20,6 +20,7 @@ const Shift = () => {
   const [accuracy, setAccuracy] = useState(0);
   const [event, setEvent] = useState("");
   const [notes, setNotes] = useState("");
+  const [error, setError]=useState(false);
 
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
@@ -163,8 +164,21 @@ const Shift = () => {
       } catch (error) {
         console.log("helooo");
       }
+    }else{
+      setError(true);
     }
   };
+  const showStatus =(clockIn, clockout)=>{
+
+    if(clockIn?.length === 0 && clockout?.length === 0){
+      return 'Pending'
+    }else if(clockIn?.length > 0 && clockout?.length === 0){
+      return 'Ongoing'
+    }else{
+      return 'Completed'
+    }
+
+  }
 
   return (
     <div className="shift-container">
@@ -203,7 +217,10 @@ const Shift = () => {
               <strong>Duration:</strong> {shift.duration}
             </li>
             <li>
-              <strong>Status:</strong> Pending
+              <strong>Client:</strong> {shift?.client}
+            </li>
+            <li>
+              <strong>Status:</strong> {showStatus(shift.clockin, shift.clockout)}
             </li>
             <li>
               <strong>Notes:</strong> {shift.notes}
@@ -259,7 +276,9 @@ const Shift = () => {
                   rows="10"
                   onChange={(e) => setNotes(e.target.value)}
                 ></textarea>
+                {error && <span style={{color:"red"}}>Make sure you have filled all fields</span>}
                 <button onClick={handleAddNotes}>Submit</button>
+                
               </div>
             )}
           </div>
@@ -270,8 +289,9 @@ const Shift = () => {
         <Link to="/report">
           <button className="shift_report_btn">Report</button>
         </Link>
-
+          
         <div className="clockin_out">
+        {shift?.clockin?.length > 0 && shift?.clockout?.length > 0 && <p className="completed-shift-text">Thank you for completing this shift.</p>}
           {shift?.clockin?.length === 0 && shift.staffEmail && (
             <button className="shift_clockin_btn" onClick={handleClockIn}>
               Clock In

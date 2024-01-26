@@ -17,7 +17,8 @@ export default function ProductList() {
   // Filter state variables
   const [filterStaffEmail, setFilterStaffEmail] = useState("");
   const [filterClient, setFilterClient] = useState("");
-  const [filterDate, setFilterDate] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
   const [filterLocation, setFilterLocation] = useState("");
 
   useEffect(() => {
@@ -35,41 +36,52 @@ export default function ProductList() {
     getShifts();
   }, []);
 
-  useEffect(() => {
-    // Filter the data locally based on the filter values
-    // Filter the data locally based on the filter values (case-insensitive)
-    const filteredData = originalData.filter((item) => {
-      const matchesStaffEmail =
-        !filterStaffEmail ||
-        (item.staffEmail &&
-          item.staffEmail
-            .toLowerCase()
-            .includes(filterStaffEmail.toLowerCase()));
-      const matchesClient =
-        !filterClient ||
-        (item.client &&
-          item.client.toLowerCase().includes(filterClient.toLowerCase()));
-      const matchesDate =
-        !filterDate ||
-        (item.date &&
-          item.date.toLowerCase().includes(filterDate.toLowerCase()));
-      const matchesLocation =
-        !filterLocation ||
-        (item.location &&
-          item.location.toLowerCase().includes(filterLocation.toLowerCase()));
-      return (
-        matchesStaffEmail && matchesClient && matchesDate && matchesLocation
-      );
-    });
+// ... (previous code)
 
-    setFilteredData(filteredData);
-  }, [
-    filterStaffEmail,
-    filterClient,
-    filterDate,
-    filterLocation,
-    originalData,
-  ]);
+useEffect(() => {
+  // Filter the data locally based on the filter values
+  const filteredData = originalData.filter((item) => {
+    const matchesStaffEmail =
+      !filterStaffEmail ||
+      (item.staffEmail &&
+        item.staffEmail.toLowerCase().includes(filterStaffEmail.toLowerCase()));
+    const matchesClient =
+      !filterClient ||
+      (item.client &&
+        item.client.toLowerCase().includes(filterClient.toLowerCase()));
+    const matchesLocation =
+      !filterLocation ||
+      (item.location &&
+        item.location.toLowerCase().includes(filterLocation.toLowerCase()));
+
+    // Check if the date is within the specified range
+    const startDate = filterStartDate ? parseDate(filterStartDate) : null;
+    const endDate = filterEndDate ? parseDate(filterEndDate) : null;
+    const itemDate = parseDate(item.date);
+    const matchesDate =
+      (!startDate || itemDate >= startDate) && (!endDate || itemDate <= endDate);
+
+    return matchesStaffEmail && matchesClient && matchesLocation && matchesDate;
+  });
+
+  setFilteredData(filteredData);
+}, [
+  filterStaffEmail,
+  filterClient,
+  filterStartDate,
+  filterEndDate,
+  filterLocation,
+  originalData,
+]);
+
+// ... (rest of the code)
+
+// Helper function to parse DD/MM/YY format to YYYY-MM-DD
+const parseDate = (dateString) => {
+  const [day, month, year] = dateString.split("/");
+  return `20${year}-${month}-${day}`;
+};
+
 
   const generatePDF = () => {
     const pdf = new jsPDF("landscape");
@@ -170,30 +182,51 @@ export default function ProductList() {
       <h3 className="incidences-header">All Shifts</h3>
       <h4 className="filter-header">Filters</h4>
       <div className="filters">
-        <input
+        <div>
+          <label htmlFor="">Staff Email:</label>
+          <input
           type="text"
-          placeholder="Staff Email"
+          placeholder="joedoe@gmail.com"
           value={filterStaffEmail}
           onChange={(e) => setFilterStaffEmail(e.target.value)}
         />
+        </div>
+        <div>
+        <label>Client:</label>
         <input
           type="text"
-          placeholder="Client"
+          placeholder="Joe"
           value={filterClient}
           onChange={(e) => setFilterClient(e.target.value)}
         />
+        </div>
+        <div>
+          <label>Start Date:</label>
+          <input
+            type="text"
+            value={filterStartDate}
+            onChange={(e) => setFilterStartDate(e.target.value)}
+            placeholder="25/01/2024"
+          />
+        </div>
+        <div>
+          <label>End Date:</label>
+          <input
+            type="text"
+            value={filterEndDate}
+            onChange={(e) => setFilterEndDate(e.target.value)}
+            placeholder="25/02/2024"
+          />
+        </div>
+        <div>
+          <label htmlFor="">Location:</label>
         <input
           type="text"
-          placeholder="Date"
-          value={filterDate}
-          onChange={(e) => setFilterDate(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Location"
+          placeholder="Sydney"
           value={filterLocation}
           onChange={(e) => setFilterLocation(e.target.value)}
         />
+        </div>
         <button onClick={generatePDF}>Generate Pdf</button>
       </div>
 

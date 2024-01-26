@@ -9,6 +9,8 @@
 }
 .filters{
   margin: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .filter-header{
@@ -31,6 +33,7 @@ outline: none;
     color: white;
     cursor: pointer;
     font-size: 15px;
+    width: 150px;
 }
 
 .productListImg {

@@ -11,7 +11,11 @@ export default function NewClient() {
   const [email, setEmail]=useState("");
   const [phone, setPhone]=useState("");
   const [address, setAdrress]=useState("");
-
+  const [DOB, setDOB]=useState("");
+  const [startdate, setStartDate]=useState("");
+  const [enddate, setEndDate]=useState("");
+  const [desc, setDesc]=useState("");
+  const [ndisNO, setNdisNo]=useState("");
   const [gender, setGender]=useState("");
   const [files, setFile] = useState([]);
 
@@ -26,7 +30,11 @@ export default function NewClient() {
     formData.append('phone',phone);
     formData.append('address',address);
     formData.append('gender',gender);
-
+    formData.append('DOB',DOB);
+    formData.append('startdate',startdate);
+    formData.append('enddate',enddate);
+    formData.append('desc',desc);
+    formData.append('ndisNo',ndisNO);
 
     for (let i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
@@ -72,7 +80,22 @@ export default function NewClient() {
           <label>Address</label>
           <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value)} />
         </div>
-        
+        <div className="newUserItem">
+          <label>Plan Start Date</label>
+          <input type="text" placeholder="01/25/2024" name="startdate"  onChange={(e) => setStartDate(e.target.value)} />
+        </div>
+        <div className="newUserItem">
+          <label>Plan End Date</label>
+          <input type="text" placeholder="01/25/2028" name="enddate"  onChange={(e) => setEndDate(e.target.value)} />
+        </div>
+        <div className="newUserItem">
+          <label>NDIS NO</label>
+          <input type="text" placeholder="56383930" name="ndisNO"  onChange={(e) => setNdisNo(e.target.value)} />
+        </div>
+        <div className="newUserItem">
+          <label>Date of Birth</label>
+          <input type="text" placeholder="25/04/1998" name="DOB"  onChange={(e) => setDOB(e.target.value)} />
+        </div>
         <div className="newUserItem">
           <label>Gender</label>
           <div className="newUserGender">
@@ -87,6 +110,10 @@ export default function NewClient() {
         <div className="newUserItem">
         <input type="file" onChange={(e) => setFile(e.target.files)} multiple/>
         <span>Select clients's documents</span>
+        </div>
+        <div className="newUserItem">
+          <label>Note</label>
+          <textarea cols={5} rows={5} placeholder="A 18 year old orphan." name="desc"  onChange={(e) => setDesc(e.target.value)} />
         </div>
         <div className="newUserItem">
           <label>Active</label>

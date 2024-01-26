@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import "./product.css";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { publicRequest } from "../../requestMethods";
@@ -12,18 +12,19 @@ const mapContainerStyle = {
   height: "60vh",
 };
 
-
 export default function Product() {
   const [open, setOpen] = useState(false);
   const [coords, setCoords] = useState({});
   const [loading, setLoading] = useState(false);
-  const [staffEmail,setStaffEmail] = useState("");
+  const [staffEmail, setStaffEmail] = useState("");
   const location = useLocation();
   const [shift, setShift] = useState({});
   const [staffs, setStaffs] = useState([]);
   const [error, setError] = useState("");
   const shiftId = location.pathname.split("/")[2];
   const [inputs, setInputs] = useState({});
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
 
   useEffect(() => {
     const getActivity = async () => {
@@ -55,6 +56,7 @@ export default function Product() {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyCeQ-SAYDNxH277bfJbNjed0Mqkik8bofo",
     libraries,
@@ -74,67 +76,62 @@ export default function Product() {
     setOpen(!open);
   };
 
-
   const selectStaff = (e) => {
-      setStaffEmail(e.target.value)
-      
-  }
+    setStaffEmail(e.target.value);
+  };
 
-  const handleAssignShift = async (e) =>{
-    e.preventDefault()
+  const handleAssignShift = async (e) => {
+    e.preventDefault();
     try {
-      if(staffEmail){
-        await publicRequest.put(`/shifts/assign/${shift._id}`,{
-          "location": shift.location,
-          "date":shift.date,
-          "time":shift.time,
-          "type":shift.type,
-          "duration":shift.duration,
-          "client":"Jeff",
-          "staffEmail":staffEmail,
-          "notes":shift.notes
-        })
-      window.location.reload();
-    }else{
-      setError("Make sure you have selected user");
-    }
-
+      if (staffEmail) {
+        await publicRequest.put(`/shifts/assign/${shift._id}`, {
+          location: shift.location,
+          date: shift.date,
+          time: shift.time,
+          type: shift.type,
+          duration: shift.duration,
+          client: "Jeff",
+          staffEmail: staffEmail,
+          notes: shift.notes,
+        });
+        window.location.reload();
+      } else {
+        setError("Make sure you have selected a user");
+      }
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
-  }
+  };
 
   const handleCancelShift = async (e) => {
     e.preventDefault();
     try {
-      await publicRequest.put(`/shifts/assign/${shift._id}`,{
-        "location": shift.location,
-        "date":shift.date,
-        "time":shift.time,
-        "type":shift.type,
-        "duration":shift.duration,
-        "client":"Jeff",
-        "staffEmail":"",
-        "notes":shift.notes
-      })
-    window.location.reload();
+      await publicRequest.put(`/shifts/assign/${shift._id}`, {
+        location: shift.location,
+        date: shift.date,
+        time: shift.time,
+        type: shift.type,
+        duration: shift.duration,
+        client: "Jeff",
+        staffEmail: "",
+        notes: shift.notes,
+      });
+      window.location.reload();
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
+  };
 
-  }
-
-  const handleUpdate = async(e) =>{
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    if(inputs){
+    if (inputs) {
       try {
-        await publicRequest.put(`/shifts/${shift._id}`,inputs);
+        await publicRequest.put(`/shifts/${shift._id}`, inputs);
         window.location.reload();
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     }
-  }
+  };
+
   const generatePDF = () => {
     const pdf = new jsPDF("landscape");
 
@@ -142,14 +139,10 @@ export default function Product() {
     pdf.text(`Shift ${shift._id} Case Notes Report`, 15, 15);
 
     // Set column headers
-    const headers = [
-      "TIME",
-      "EVENT",
-      "NOTES",
-    ];
+    const headers = ["TIME", "EVENT", "NOTES"];
 
     // Set data for the table
-    const tableData = shift?.casenotes?.map((item) => [
+    const tableData = handleFilterDateRange().map((item) => [
       item.time,
       item.event,
       item.notes,
@@ -170,160 +163,241 @@ export default function Product() {
     // Save the PDF with a specific name
     pdf.save(`shift_${shift._id}_casenotes_report.pdf`);
   };
+
+  const handleFilterDateRange = () => {
+    const filteredCasenotes = shift?.casenotes?.filter((note) => {
+      const noteDate = new Date(note.time);
+      const startDate = filterStartDate ? new Date(filterStartDate) : null;
+      const endDate = filterEndDate ? new Date(filterEndDate) : null;
+
+      return (
+        (!startDate || noteDate >= startDate) &&
+        (!endDate || noteDate <= endDate)
+      );
+    });
+
+    return filteredCasenotes || [];
+  };
+
   return (
     <div className="product">
-    {loading ? <span>Loading ...</span> :
-    
-    <div>
-      <div className="productTitleContainer">
-        <h3 className="productTitle">Shift: {shiftId}</h3>
-        <Link to="/newproduct">
-          <button className="productAddButton">Create</button>
-        </Link>
-      </div>
-      <div className="productTop">
-        <div className="productTopLeft">
-          <ul>
-            <li>
-              <strong>ID:</strong>
-              {shift._id}
-            </li>
-            <li>
-              <strong>Location: </strong>
-              <input onChange={handleChange} name="location" type="text" className="input-edit" placeholder={shift.location} />
-            </li>
-            <li>
-              <strong>Date and Time: </strong>
-              <input  onChange={handleChange} name="date"type="text" className="input-edit" placeholder={shift.date} />
-              <input  onChange={handleChange} name="time" type="text" className="input-edit" placeholder={shift.time} />
-           
-            </li>
-            <li>
-              <strong>Type:</strong> 
-              <input  onChange={handleChange} name="type" type="text" className="input-edit" placeholder={shift.type} />
-            </li>
-            <li>
-              <strong>Duration:</strong>
-              <input  onChange={handleChange} name="duration" type="text" className="input-edit" placeholder={shift.duration} /> 
-            </li>
-            <li>
-              <strong>Client:</strong>
-              <input  onChange={handleChange} name="client" type="text" className="input-edit" placeholder={shift?.client} /> 
-            </li>
-            <li>
-              <strong>Assigned To:</strong> 
-             {shift.staffEmail}
-            </li>
-            <li>
-              <strong>Notes:</strong>
-              <textarea  className="shift-textarea" name="" id="" cols="30" rows="10" placeholder={shift.notes}></textarea>
-            </li>
-            
-            <li>
-              <strong>Clock In:</strong>
-              {shift?.clockin?.map((clock, index) => (
-                <div key={index}>
-                  <span>Time:{clock.time}</span> |
-                  <span>Accuracy:{clock.accuracy} Metres</span> |
-                  <button
-                    className="showmap-btn"
-                    onClick={(e) => handleCloseMap(e, clock.coords)}
-                  >
-                    Show Map
-                  </button>
-                </div>
-              ))}
-            </li>
-            <li>
-              <strong>Clock Out:</strong>
-              {shift?.clockout?.map((clock, index) => (
-                <div key={index}>
-                  <span>Time:{clock.time}</span> |
-                  <span>Accuracy:{clock.accuracy} Metres</span> |
-                  <button
-                    className="showmap-btn"
-                    onClick={(e) => handleCloseMap(e, clock.coords)}
-                  >
-                    Show Map
-                  </button>
-                </div>
-              ))}
-            </li>
-            
-
-            <button className="update-shift" onClick={handleUpdate}>Update</button>
-          </ul>
-          
-        </div>
-        <div className="productTopRight">
-        <button onClick={generatePDF} className="generatepdf">Generate Case Notes Pdf</button>
-          <div className="productInfoBottom">
-          
-            <table>
-              <tr>
-                <th>Date/Time</th>
-                <th>Case</th>
-                <th>Notes</th>
-              </tr>
-              {
-                shift?.casenotes?.map((note, index) =>      
-                <tr key={index}>
-                <td>{note.time}</td>
-                <td>{note.event}</td>
-                <td>
-                 {note.notes}
-                </td>
-              </tr>
-                
-                )
-              }
-            </table>
+      {loading ? (
+        <span>Loading ...</span>
+      ) : (
+        <div>
+          <div className="productTitleContainer">
+            <h3 className="productTitle">Shift: {shiftId}</h3>
+            <Link to="/newproduct">
+              <button className="productAddButton">Create</button>
+            </Link>
           </div>
-        </div>
-      </div>
-      <div className="productBottom">
-        <form className="productForm">
-          <div className="productFormLeft">
-            <ul>
-              <li>
-                <strong>Shift Date:</strong>{shift.date}
-              </li>
-              <li>
-                <strong>Shift Time:</strong>{shift.time}
-              </li>
-            </ul>
+          <div className="productTop">
+            <div className="productTopLeft">
+              <ul>
+                <li>
+                  <strong>ID:</strong>
+                  {shift._id}
+                </li>
+                <li>
+                  <strong>Location: </strong>
+                  <input
+                    onChange={handleChange}
+                    name="location"
+                    type="text"
+                    className="input-edit"
+                    placeholder={shift.location}
+                  />
+                </li>
+                <li>
+                  <strong>Date and Time: </strong>
+                  <input
+                    onChange={handleChange}
+                    name="date"
+                    type="text"
+                    className="input-edit"
+                    placeholder={shift.date}
+                  />
+                  <input
+                    onChange={handleChange}
+                    name="time"
+                    type="text"
+                    className="input-edit"
+                    placeholder={shift.time}
+                  />
+                </li>
+                <li>
+                  <strong>Type:</strong>
+                  <input
+                    onChange={handleChange}
+                    name="type"
+                    type="text"
+                    className="input-edit"
+                    placeholder={shift.type}
+                  />
+                </li>
+                <li>
+                  <strong>Duration:</strong>
+                  <input
+                    onChange={handleChange}
+                    name="duration"
+                    type="text"
+                    className="input-edit"
+                    placeholder={shift.duration}
+                  />
+                </li>
+                <li>
+                  <strong>Client:</strong>
+                  <input
+                    onChange={handleChange}
+                    name="client"
+                    type="text"
+                    className="input-edit"
+                    placeholder={shift?.client}
+                  />
+                </li>
+                <li>
+                  <strong>Assigned To:</strong>
+                  {shift.staffEmail}
+                </li>
+                <li>
+                  <strong>Notes:</strong>
+                  <textarea
+                    className="shift-textarea"
+                    name=""
+                    id=""
+                    cols="30"
+                    rows="10"
+                    placeholder={shift.notes}
+                  ></textarea>
+                </li>
 
-            <select name="staffEmail"  onChange={selectStaff}>
-            {staffs.map((staff,index) => (
-              
-              <option value={staff.email} name={staff.email} key={index}>
-                {staff.fullname}
-              </option>
-            ))}
-          </select>
-            <button className="productAddButton" onClick={handleAssignShift}>Assign to Staff</button>
-            {error && <span className="error">{error}</span>}
-            {shift.staffEmail && <button className="cancel-shift" onClick={handleCancelShift}>Cancel Shift</button>}
+                <li>
+                  <strong>Clock In:</strong>
+                  {shift?.clockin?.map((clock, index) => (
+                    <div key={index}>
+                      <span>Time:{clock.time}</span> |
+                      <span>Accuracy:{clock.accuracy} Metres</span> |
+                      <button
+                        className="showmap-btn"
+                        onClick={(e) => handleCloseMap(e, clock.coords)}
+                      >
+                        Show Map
+                      </button>
+                    </div>
+                  ))}
+                </li>
+                <li>
+                  <strong>Clock Out:</strong>
+                  {shift?.clockout?.map((clock, index) => (
+                    <div key={index}>
+                      <span>Time:{clock.time}</span> |
+                      <span>Accuracy:{clock.accuracy} Metres</span> |
+                      <button
+                        className="showmap-btn"
+                        onClick={(e) => handleCloseMap(e, clock.coords)}
+                      >
+                        Show Map
+                      </button>
+                    </div>
+                  ))}
+                </li>
+
+                <button className="update-shift" onClick={handleUpdate}>
+                  Update
+                </button>
+              </ul>
+            </div>
+            <div className="productTopRight">   
+              <div className="productInfoBottom">
+                <div className="date-range">
+                  <input
+                    type="date"
+                    value={filterStartDate}
+                    onChange={(e) => setFilterStartDate(e.target.value)}
+                  />
+                  <input
+                    type="date"
+                    value={filterEndDate}
+                    onChange={(e) => setFilterEndDate(e.target.value)}
+                  />
+                  <button onClick={generatePDF}>Generate Case Notes Pdf</button>
+                </div>
+                <table>
+                  <tr>
+                    <th>Date/Time</th>
+                    <th>Case</th>
+                    <th>Notes</th>
+                  </tr>
+                  {handleFilterDateRange().map((note, index) => (
+                    <tr key={index}>
+                      <td>{note.time}</td>
+                      <td>{note.event}</td>
+                      <td>{note.notes}</td>
+                    </tr>
+                  ))}
+                </table>
+              </div>
+            </div>
           </div>
-        </form>
-      </div>
-      {open && (
-        <div className="popup">
-          <button className="popup-map-btn" onClick={handleCloseMap}>
-            close
-          </button>
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            zoom={10}
-            center={coords}
-          >
-            <Marker position={coords} />
-          </GoogleMap>
+          <div className="productBottom">
+            <form className="productForm">
+              <div className="productFormLeft">
+                <ul>
+                  <li>
+                    <strong>Shift Date:</strong>
+                    {shift.date}
+                  </li>
+                  <li>
+                    <strong>Shift Time:</strong>
+                    {shift.time}
+                  </li>
+                </ul>
+
+                <select name="staffEmail" onChange={selectStaff}>
+                  {staffs.map((staff, index) => (
+                    <option
+                      value={staff.email}
+                      name={staff.email}
+                      key={index}
+                    >
+                      {staff.fullname}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  className="productAddButton"
+                  onClick={handleAssignShift}
+                >
+                  Assign to Staff
+                </button>
+                {error && <span className="error">{error}</span>}
+                {shift.staffEmail && (
+                  <button
+                    className="cancel-shift"
+                    onClick={handleCancelShift}
+                  >
+                    Cancel Shift
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+          {open && (
+            <div className="popup">
+              <button className="popup-map-btn" onClick={handleCloseMap}>
+                close
+              </button>
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                zoom={10}
+                center={coords}
+              >
+                <Marker position={coords} />
+              </GoogleMap>
+            </div>
+          )}
         </div>
       )}
-      </div>
-    
-    }
     </div>
   );
 }

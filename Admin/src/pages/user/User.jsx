@@ -82,7 +82,7 @@ export default function User() {
   return (
     <div className="user">
       <div className="userTitleContainer">
-        <h1 className="userTitle">Edit User</h1>
+        <h1 className="userTitle">Edit Staff</h1>
         <Link to="/newUser">
           <button className="userAddButton">Create</button>
         </Link>
@@ -117,7 +117,9 @@ export default function User() {
               <LocationSearching className="userShowIcon" />
               <span className="userShowInfoTitle">{staff.address}</span>
             </div>
-
+            <div className="userShowInfo">
+              <span className="userShowInfoTitle"><strong>Staff ID: </strong> {staff.staffID}</span>
+            </div>
             <div>
               <span className="documents">Documents</span>
 

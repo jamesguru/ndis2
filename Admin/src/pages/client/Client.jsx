@@ -6,6 +6,7 @@ import {
     PhoneAndroid,
     Visibility,
     Description,
+    FormatListNumberedRtl,
   } from "@material-ui/icons";
   import "./client.css";
   import { Link, useLocation} from "react-router-dom";
@@ -54,11 +55,11 @@ import { publicRequest,url } from "../../requestMethods";
             <span className="userShowTitle">Account Details</span>
             <div className="userShowInfo">
               <PermIdentity className="userShowIcon" />
-              <span className="userShowInfoTitle">{client.username}</span>
+              <span className="userShowInfoTitle">{client.fullname}</span>
             </div>
             <div className="userShowInfo">
               <CalendarToday className="userShowIcon" />
-              <span className="userShowInfoTitle">10.12.1999</span>
+              <span className="userShowInfoTitle">{client.DOB}</span>
             </div>
             <span className="userShowTitle">Contact Details</span>
             <div className="userShowInfo">
@@ -72,6 +73,18 @@ import { publicRequest,url } from "../../requestMethods";
             <div className="userShowInfo">
               <LocationSearching className="userShowIcon" />
               <span className="userShowInfoTitle">{client.address}</span>
+            </div>
+            <div className="userShowInfo">
+              <span className="userShowInfoTitle"><strong>NDIS NO:</strong> {client.ndisNo}</span>
+            </div>
+            <div className="userShowInfo">
+              <span className="userShowInfoTitle"><strong>Plan Start Date:</strong> {client.startdate}</span>
+            </div>
+            <div className="userShowInfo">
+              <span className="userShowInfoTitle"><strong>Plan End Date:</strong> {client.enddate}</span>
+            </div>
+            <div className="userShowInfo">
+              <span className="userShowInfoTitle"><strong>Note:</strong> {client.desc}</span>
             </div>
           </div>
           <div>
@@ -127,6 +140,46 @@ import { publicRequest,url } from "../../requestMethods";
                 <input
                   type="text"
                   placeholder={client.address}
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+                <label>DOB</label>
+                <input
+                  type="text"
+                  placeholder={client.DOB}
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+                <label>NDIS NO</label>
+                <input
+                  type="text"
+                  placeholder={client.ndisNo}
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+                <label>Plan Start Date</label>
+                <input
+                  type="text"
+                  placeholder={client.startdate}
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+                <label>Plan End Date</label>
+                <input
+                  type="text"
+                  placeholder={client.enddate}
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+                <label>Note</label>
+                <input
+                  type="text"
+                  placeholder={client.desc}
                   className="userUpdateInput"
                 />
               </div>

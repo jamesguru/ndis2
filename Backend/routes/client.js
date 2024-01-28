@@ -25,6 +25,11 @@ router.post("/", upload.array('files', 5), async (req, res) => {
     phone: req.body.phone,
     address: req.body.address,
     gender: req.body.gender,
+    DOB:req.body.DOB,
+    ndisNo:req.body.ndisNo,
+    desc:req.body.desc,
+    startdate:req.body.startdate,
+    enddate:req.body.enddate,
     documents:fileNames,
     
   });

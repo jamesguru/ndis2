@@ -109,7 +109,7 @@ const parseDate = (dateString) => {
       item.client,
       item.duration,
       item.staffEmail,
-      item.distance,
+      item?.distance,
     ]);
 
     // Auto page breaks and table styling

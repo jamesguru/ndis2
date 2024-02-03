@@ -187,7 +187,7 @@ export default function Product() {
         <div>
           <div className="productTitleContainer">
             <h3 className="productTitle">Shift: {shiftId}</h3>
-            <Link to="/newproduct">
+            <Link to="/newshift">
               <button className="productAddButton">Create</button>
             </Link>
           </div>
@@ -308,19 +308,27 @@ export default function Product() {
               </ul>
             </div>
             <div className="productTopRight">   
+            <strong>Distance covered(km): {shift?.distance}</strong>
               <div className="productInfoBottom">
+              
+              
+                <strong>Filter</strong>
                 <div className="date-range">
+                  <strong>From</strong>
                   <input
                     type="date"
                     value={filterStartDate}
+                    placeholder="25/01/2024"
                     onChange={(e) => setFilterStartDate(e.target.value)}
                   />
+                  <strong>to</strong>
                   <input
                     type="date"
+                    placeholder="25/01/2025"
                     value={filterEndDate}
                     onChange={(e) => setFilterEndDate(e.target.value)}
                   />
-                  <button onClick={generatePDF}>Generate Case Notes Pdf</button>
+                  <button onClick={generatePDF}>Download PDF</button>
                 </div>
                 <table>
                   <tr>

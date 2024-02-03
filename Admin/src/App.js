@@ -63,7 +63,7 @@ function App() {
               <Route path="/shift/:shiftId">
                 <Product />
               </Route>
-              <Route path="/newproduct">
+              <Route path="/newshift">
                 <NewProduct />
               </Route>
               <Route path="/announcement">

@@ -123,6 +123,9 @@ export default function ClientList() {
   return (
     <div className="userList">
       <h3 className="incidences-header">All Clients</h3>
+      <Link to="/newclient">
+      <button className="new-shift">New Client</button>
+      </Link>
       <button onClick={generatePDF} className="generatepdf">Generate Pdf</button>
      { loading ? <span>Loading...</span>:<DataGrid
         rows={data}

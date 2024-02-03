@@ -123,3 +123,13 @@ outline: none;
     right: 0;
     font-size: 15px;
   }
+
+  .new-shift{
+    background-color: teal;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }

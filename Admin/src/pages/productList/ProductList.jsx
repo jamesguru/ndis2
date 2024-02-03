@@ -97,7 +97,7 @@ const parseDate = (dateString) => {
       "CLIENT",
       "DURATION",
       "STAFF",
-      "NOTES",
+      "DISTANCE",
     ];
 
     // Set data for the table
@@ -109,7 +109,7 @@ const parseDate = (dateString) => {
       item.client,
       item.duration,
       item.staffEmail,
-      item.notes,
+      item.distance,
     ]);
 
     // Auto page breaks and table styling
@@ -156,7 +156,7 @@ const parseDate = (dateString) => {
     { field: "location", headerName: "Location", width: 140 },
     { field: "duration", headerName: "Duration", width: 120 },
     { field: "staffEmail", headerName: "Staff Email", width: 150 },
-    { field: "notes", headerName: "Notes", width: 160 },
+    { field: "distance", headerName: "Distance(km)", width: 200 },
     {
       field: "action",
       headerName: "Action",
@@ -180,6 +180,10 @@ const parseDate = (dateString) => {
   return (
     <div className="productList">
       <h3 className="incidences-header">All Shifts</h3>
+      <Link to="/newshift">
+      <button className="new-shift">New Shift</button>
+      </Link>
+      
       <h4 className="filter-header">Filters</h4>
       <div className="filters">
         <div>

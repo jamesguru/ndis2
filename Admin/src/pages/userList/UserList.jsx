@@ -122,6 +122,9 @@ export default function UserList() {
   return (
     <div className="userList">
       <h3 className="incidences-header">All Staffs</h3>
+      <Link to="/newuser">
+      <button className="new-shift">New Staff</button>
+      </Link>
       <button onClick={generatePDF} className="generatepdf">Generate Pdf</button>
       {loading ? (
         <span>Loading ...</span>

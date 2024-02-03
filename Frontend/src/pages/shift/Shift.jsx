@@ -20,7 +20,8 @@ const Shift = () => {
   const [accuracy, setAccuracy] = useState(0);
   const [event, setEvent] = useState("");
   const [notes, setNotes] = useState("");
-  const [error, setError]=useState(false);
+  const [distance, setDistance] = useState(0);
+  const [error, setError] = useState(false);
 
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
@@ -164,22 +165,33 @@ const Shift = () => {
       } catch (error) {
         console.log("helooo");
       }
-    }else{
+    } else {
       setError(true);
     }
   };
-  const showStatus =(clockIn, clockout)=>{
+  const showStatus = (clockIn, clockout) => {
+    if (clockIn?.length === 0 && clockout?.length === 0) {
+      return "Pending";
+    } else if (clockIn?.length > 0 && clockout?.length === 0) {
+      return "Ongoing";
+    } else {
+      return "Completed";
+    }
+  };
 
-    if(clockIn?.length === 0 && clockout?.length === 0){
-      return 'Pending'
-    }else if(clockIn?.length > 0 && clockout?.length === 0){
-      return 'Ongoing'
-    }else{
-      return 'Completed'
+  const handleUpdateDistance = async(e) => {
+    e.preventDefault()
+
+    try {
+      await publicRequest.put(`/shifts/${shiftId}`, {
+        distance,
+      });
+      window.location.reload();
+    } catch (error) {
+      console.log('error occurred')
     }
 
   }
-
   return (
     <div className="shift-container">
       <ClipLoader
@@ -220,7 +232,8 @@ const Shift = () => {
               <strong>Client:</strong> {shift?.client}
             </li>
             <li>
-              <strong>Status:</strong> {showStatus(shift.clockin, shift.clockout)}
+              <strong>Status:</strong>{" "}
+              {showStatus(shift.clockin, shift.clockout)}
             </li>
             <li>
               <strong>Notes:</strong> {shift.notes}
@@ -234,18 +247,29 @@ const Shift = () => {
               Bid
             </button>
           )}
+          {shift?.clockout?.length === 0 && shift.staffEmail && 
+          <div className="distance">
+          <strong><span>Distance covered: </span></strong>
+            <input type="number" placeholder={shift?.distance} onChange={(e) => setDistance(e.target.value)}/>
+            <div className="distance-update">   
+              <span>km</span>
+              <button className="update-distance" onClick={handleUpdateDistance}>update</button>
+            </div>
+          </div>
+          
+          }
+          
         </div>
 
-            {shift.staffEmail && 
-            
-            <div className="shift_casenotes">
+        {shift.staffEmail && (
+          <div className="shift_casenotes">
             <table>
               <tr>
                 <th>Date/Time</th>
                 <th>Case</th>
                 <th>Notes</th>
               </tr>
-  
+
               {shift?.casenotes?.length ? (
                 shift?.casenotes?.map((casenote, index) => (
                   <tr key={index}>
@@ -258,12 +282,15 @@ const Shift = () => {
                 <h3>No case notes Added</h3>
               )}
             </table>
-  
+
             <div className="add_casenotes">
               <span>Add CaseNotes</span>
-              <FaPlus className="add_casenotes_icon" onClick={handleCaseNotes} />
+              <FaPlus
+                className="add_casenotes_icon"
+                onClick={handleCaseNotes}
+              />
             </div>
-  
+
             {open && (
               <div className="casenotes_inputs">
                 <label htmlFor="">Case</label>
@@ -276,23 +303,30 @@ const Shift = () => {
                   rows="10"
                   onChange={(e) => setNotes(e.target.value)}
                 ></textarea>
-                {error && <span style={{color:"red"}}>Make sure you have filled all fields</span>}
-                {error && <span style={{color:"red"}}>You should double click.</span>}
+                {error && (
+                  <span style={{ color: "red" }}>
+                    Make sure you have filled all fields
+                  </span>
+                )}
+                {error && (
+                  <span style={{ color: "red" }}>You should double click.</span>
+                )}
                 <button onClick={handleAddNotes}>Submit</button>
-                
               </div>
             )}
           </div>
-            
-            }
+        )}
       </div>
       <div className="button-container">
         <Link to="/report">
           <button className="shift_report_btn">Report</button>
         </Link>
-          
         <div className="clockin_out">
-        {shift?.clockin?.length > 0 && shift?.clockout?.length > 0 && <p className="completed-shift-text">Thank you for completing this shift.</p>}
+          {shift?.clockin?.length > 0 && shift?.clockout?.length > 0 && (
+            <p className="completed-shift-text">
+              Thank you for completing this shift.
+            </p>
+          )}
           {shift?.clockin?.length === 0 && shift.staffEmail && (
             <button className="shift_clockin_btn" onClick={handleClockIn}>
               Clock In

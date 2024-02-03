@@ -141,6 +141,37 @@ strong{
   
 }
 
+.distance{
+
+display: flex;
+align-items: center;
+margin: 20px 0px;
+}
+.distance input{
+    width:70px;
+    margin: 0px 5px;
+}
+
+.distance span{
+    margin: 0px 5px;
+    color: #333;
+    font-size: 15px;
+
+}
+.distance button{
+    background-color: rgb(24 92 175);
+    border: none;
+    cursor: pointer;
+    color: #f0f0f0;
+    padding: 5px;
+    width: 70px;
+}
+
+.distance-update{
+    display: flex;
+    flex-direction: column;
+}
+
 /* Responsive adjustments */
 @media only screen and (max-width: 768px) {
     .shift{

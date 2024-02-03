@@ -30,6 +30,9 @@ export default function NewUser() {
         const randomIndex = Math.floor(Math.random() * allChars.length);
         password += allChars.charAt(randomIndex);
       }
+
+    const orderid = Math.floor(Math.random() * 10000 + 1);
+    const id = `AP${orderid}`;
     const formData = new FormData();
     formData.append('username',username);
     formData.append('fullname',fullname);
@@ -38,7 +41,7 @@ export default function NewUser() {
     formData.append('phone',phone);
     formData.append('address',address);
     formData.append('gender',gender);
-    formData.append('staffID',staffID);
+    formData.append('staffID',id);
 
     for (let i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
@@ -83,10 +86,6 @@ export default function NewUser() {
         <div className="newUserItem">
           <label>Address</label>
           <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value.replace(/\s/g, ''))} />
-        </div>
-        <div className="newUserItem">
-          <label>Staff ID</label>
-          <input type="text" placeholder="AP100" name="staffID"  onChange={(e) => setStaffID(e.target.value.replace(/\s/g, ''))}/>
         </div>
         <div className="newUserItem">
           <label>Gender</label>

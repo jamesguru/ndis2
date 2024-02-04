@@ -8,7 +8,6 @@ export default function NewClient() {
   const [username, setUsername]=useState("");
   const [fullname, setFullname]=useState("");
   const [password, setPassword]= useState("");
-  const [email, setEmail]=useState("");
   const [phone, setPhone]=useState("");
   const [address, setAdrress]=useState("");
   const [DOB, setDOB]=useState("");
@@ -26,7 +25,6 @@ export default function NewClient() {
     formData.append('username',username);
     formData.append('fullname',fullname);
     formData.append('password',password);
-    formData.append('email',email);
     formData.append('phone',phone);
     formData.append('address',address);
     formData.append('gender',gender);
@@ -66,12 +64,7 @@ export default function NewClient() {
         <div className="newUserItem">
           <label>Full Name</label>
           <input type="text" placeholder="John Smith" name="fullname"  onChange={(e) => setFullname(e.target.value)}/>
-        </div>
-        <div className="newUserItem">
-          <label>Email</label>
-          <input type="email" placeholder="john@gmail.com" name="email" onChange={(e) => setEmail(e.target.value)} />
-        </div>
-       
+        </div>   
         <div className="newUserItem">
           <label>Phone</label>
           <input type="text" placeholder="+1 123 456 78" name="phone"  onChange={(e) => setPhone(e.target.value)}/>

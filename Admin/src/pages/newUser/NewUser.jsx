@@ -9,7 +9,6 @@ export default function NewUser() {
   const [email, setEmail]=useState("");
   const [phone, setPhone]=useState("");
   const [address, setAdrress]=useState("");
-  const [staffID, setStaffID]= useState("");
   const [gender, setGender]=useState("");
   const [files, setFile] = useState([]);
 
@@ -69,11 +68,11 @@ export default function NewUser() {
       <form className="newUserForm">
         <div className="newUserItem">
           <label>Username</label>
-          <input type="text" placeholder="john" name="username"  onChange={(e) => setUsername(e.target.value.replace(/\s/g, ''))}/>
+          <input type="text" placeholder="john" name="username"  onChange={(e) => setUsername(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Full Name</label>
-          <input type="text" placeholder="John Smith" name="fullname"  onChange={(e) => setFullname(e.target.value.replace(/\s/g, ''))}/>
+          <input type="text" placeholder="John Smith" name="fullname"  onChange={(e) => setFullname(e.target.value)}/>
         </div>
         <div className="newUserItem">
           <label>Email</label>
@@ -85,7 +84,7 @@ export default function NewUser() {
         </div>
         <div className="newUserItem">
           <label>Address</label>
-          <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value.replace(/\s/g, ''))} />
+          <input type="text" placeholder="New York | USA" name="address"  onChange={(e) => setAdrress(e.target.value)} />
         </div>
         <div className="newUserItem">
           <label>Gender</label>

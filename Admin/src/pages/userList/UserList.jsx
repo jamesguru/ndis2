@@ -59,15 +59,14 @@ export default function UserList() {
 
   const delelePemantly = async () => {
     if (staffID) {
-      try {
-        await publicRequest.delete(`/users/${staffID}`);
-        window.location.reload();
-      } catch (error) {}
+      
     }
   };
-  const handleDelete = (id) => {
-    setOpen(true);
-    setStaffID(id);
+  const handleDelete = async (id) => {
+    try {
+      await publicRequest.delete(`/users/${id}`);
+      window.location.reload();
+    } catch (error) {}
   };
   const handleCancel = (e) => {
     e.preventDefault();

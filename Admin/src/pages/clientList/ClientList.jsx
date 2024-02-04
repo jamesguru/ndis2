@@ -23,9 +23,9 @@ export default function ClientList() {
       "ID",
       "Full Name",
       "PHONE",
-      "EMAIL",
       "ADDRESS",
       "GENDER",
+      "Note",
     ];
 
     // Set data for the table
@@ -33,9 +33,9 @@ export default function ClientList() {
       item._id,
       item.fullname,
       item.phone,
-      item.email,
       item.address,
       item.gender,
+      item.desc,
     ]);
 
     // Auto page breaks and table styling
@@ -68,23 +68,21 @@ export default function ClientList() {
     
     getItems();
   }, []);
-  const handleDelete = (id) => {
-    setOpen(true);
-    setClientID(id);
+  const handleDelete = async(id) => {
+    try {
+      await publicRequest.delete(`/clients/${id}`)
+      window.location.reload();
+      
+    } catch (error) {
+      
+    }
     
   };
 
   const delelePemantly = async () => {
     
     if(clientID){
-      try {
-
-        await publicRequest.delete(`/clients/${clientID}`)
-        window.location.reload();
-        
-      } catch (error) {
-        
-      }
+      
     }
   }
 
@@ -97,9 +95,9 @@ export default function ClientList() {
     { field: "_id", headerName: "ID", width: 90 },
     { field: "fullname", headerName: "Full Name", width: 150 },
     { field: "phone", headerName: "Phone", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
     { field: "address", headerName: "address", width: 200 },
-   
+    { field: "desc", headerName: "Note", width: 200 },
+    
     {
       field: "action",
       headerName: "Action",

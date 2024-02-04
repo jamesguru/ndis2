@@ -130,18 +130,17 @@ const parseDate = (dateString) => {
 
   const delelePermanently = async () => {
     if (shiftID) {
-      try {
-        await publicRequest.delete(`/shifts/${shiftID}`);
-        window.location.reload();
-      } catch (error) {
-        console.error("Error deleting shift:", error);
-      }
+      
     }
   };
 
-  const handleDelete = (id) => {
-    setOpen(true);
-    setShiftID(id);
+  const handleDelete = async(id) => {
+    try {
+      await publicRequest.delete(`/shifts/${id}`);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting shift:", error);
+    }
   };
 
   const handleCancel = (e) => {

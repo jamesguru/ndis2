@@ -20,7 +20,6 @@ router.post("/", upload.array('files', 5), async (req, res) => {
   const fileNames = req.files.map((file) => file.filename);
   const newClient = Client({
     username: req.body.username,
-    email: req.body.email,
     fullname: req.body.fullname,
     phone: req.body.phone,
     address: req.body.address,

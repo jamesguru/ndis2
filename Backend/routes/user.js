@@ -32,7 +32,9 @@ router.put("/:id", async (req, res) => {
       { new: true }
     );
   
-      await sendUpdatePasswordEmail(req.body.email, unencryptedPassword);
+      if(req.body.email && unencryptedPassword){
+        await sendUpdatePasswordEmail(req.body.email, unencryptedPassword);
+      }
     res.status(201).json(updatedUser);
   } catch (error) {
     res.status(500).json(error);
@@ -43,7 +45,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    await User.findOneAndDelete(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
 
     res.status(200).json("The user has been deleted");
   } catch (error) {

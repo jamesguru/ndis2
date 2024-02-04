@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const ClientSchema = mongoose.Schema({
     fullname:{type:String},
-    email:{type:String, default:"N/A"},
     phone:{type:String},
     address:{type:String},
     gender:{type:String},

@@ -18,6 +18,8 @@ import { publicRequest,url } from "../../requestMethods";
     const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [client, setClient] = useState({});
+  const [inputs, setInputs] = useState({});
+
   useEffect(() => {
     const getClient = async () => {
       try {
@@ -34,6 +36,23 @@ import { publicRequest,url } from "../../requestMethods";
     window.open(`${url}/files/${doc}`,"_blank","noreferrer")
 
   }
+
+  const handleChange = (e) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (inputs) {
+      try {
+        await publicRequest.put(`/clients/${client._id}`, inputs);
+        window.location.reload();
+      } catch (error) {}
+    }
+  };
+
     return (
       <div className="user">
       <div className="userTitleContainer">
@@ -103,20 +122,15 @@ import { publicRequest,url } from "../../requestMethods";
           <span className="userUpdateTitle">Edit</span>
           <form className="userUpdateForm">
             <div className="userUpdateLeft">
-              <div className="userUpdateItem">
-                <label>Username</label>
-                <input
-                  type="text"
-                  placeholder={client.username}
-                  className="userUpdateInput"
-                />
-              </div>
+             
               <div className="userUpdateItem">
                 <label>Full Name</label>
                 <input
                   type="text"
                   placeholder={client.fullname}
                   className="userUpdateInput"
+                  name="fullname"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -125,6 +139,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.email}
                   className="userUpdateInput"
+                  name="email"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -133,6 +149,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.phone}
                   className="userUpdateInput"
+                  name="phone"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -141,6 +159,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.address}
                   className="userUpdateInput"
+                  name="address"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -149,6 +169,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.DOB}
                   className="userUpdateInput"
+                  name="DOB"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -157,6 +179,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.ndisNo}
                   className="userUpdateInput"
+                  name="ndisNo"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -165,6 +189,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.startdate}
                   className="userUpdateInput"
+                  name="startdate"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -173,6 +199,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.enddate}
                   className="userUpdateInput"
+                  name="enddate"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -181,6 +209,8 @@ import { publicRequest,url } from "../../requestMethods";
                   type="text"
                   placeholder={client.desc}
                   className="userUpdateInput"
+                  name="desc"
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -192,7 +222,7 @@ import { publicRequest,url } from "../../requestMethods";
                 </label>
                 <input type="file" id="file" style={{ display: "none" }} />
               </div>
-              <button className="userUpdateButton">Update</button>
+              <button className="userUpdateButton" onClick={handleUpdate}>Update</button>
             </div>
           </form>
         </div>

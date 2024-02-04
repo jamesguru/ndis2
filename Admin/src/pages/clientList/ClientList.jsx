@@ -68,21 +68,22 @@ export default function ClientList() {
     
     getItems();
   }, []);
+
   const handleDelete = async(id) => {
-    try {
-      await publicRequest.delete(`/clients/${id}`)
-      window.location.reload();
-      
-    } catch (error) {
-      
-    }
-    
+   setOpen(!open);
+   setClientID(id);
   };
 
-  const delelePemantly = async () => {
+  const delelePemantly = async (e) => {
+    e.preventDefault();
     
     if(clientID){
-      
+      try {
+        await publicRequest.delete(`/clients/${clientID}`);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error deleting shift:", error);
+      }
     }
   }
 

@@ -128,19 +128,21 @@ const parseDate = (dateString) => {
     pdf.save("shifts_report.pdf");
   };
 
-  const delelePermanently = async () => {
+  const delelePermanently = async (e) => {
+    e.preventDefault();
     if (shiftID) {
-      
+      try {
+        await publicRequest.delete(`/shifts/${shiftID}`);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error deleting shift:", error);
+      }
     }
   };
 
   const handleDelete = async(id) => {
-    try {
-      await publicRequest.delete(`/shifts/${id}`);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting shift:", error);
-    }
+    setOpen(!open);
+    setShiftID(id);
   };
 
   const handleCancel = (e) => {
@@ -149,13 +151,14 @@ const parseDate = (dateString) => {
   };
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 200 },
+    { field: "_id", headerName: "ID", width: 150 },
     { field: "date", headerName: "Date", width: 120 },
-    { field: "time", headerName: "Time", width: 150 },
+    { field: "time", headerName: "Time", width: 100 },
     { field: "location", headerName: "Location", width: 140 },
+    { field: "client", headerName: "Client", width: 140 },
     { field: "duration", headerName: "Duration", width: 120 },
-    { field: "staffEmail", headerName: "Staff Email", width: 150 },
-    { field: "distance", headerName: "Distance(km)", width: 200 },
+    { field: "staffEmail", headerName: "Staff Email", width: 120 },
+    { field: "distance", headerName: "Distance(km)", width: 150 },
     {
       field: "action",
       headerName: "Action",

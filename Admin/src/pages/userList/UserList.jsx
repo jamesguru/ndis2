@@ -57,17 +57,22 @@ export default function UserList() {
     pdf.save("staffs_report.pdf");
   };
 
-  const delelePemantly = async () => {
+  const delelePemantly = async (e) => {
+    e.preventDefault();
     if (staffID) {
-      
+      try {
+        await publicRequest.delete(`/users/${staffID}`);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error deleting shift:", error);
+      } 
     }
   };
-  const handleDelete = async (id) => {
-    try {
-      await publicRequest.delete(`/users/${id}`);
-      window.location.reload();
-    } catch (error) {}
+  const handleDelete = async(id) => {
+    setOpen(!open)
+    setStaffID(id)
   };
+
   const handleCancel = (e) => {
     e.preventDefault();
     setOpen(!open);

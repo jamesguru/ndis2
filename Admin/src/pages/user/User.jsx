@@ -4,12 +4,11 @@ import {
   MailOutline,
   PermIdentity,
   PhoneAndroid,
-  Visibility,
   Description,
 } from "@material-ui/icons";
 import "./user.css";
 import { publicRequest, url } from "../../requestMethods";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -19,6 +18,8 @@ export default function User() {
   const [staff, setStaff] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [inputs, setInputs] = useState({});
+  const history = useHistory();
   useEffect(() => {
     const getStaff = async () => {
       try {
@@ -76,9 +77,25 @@ export default function User() {
   const handleSubmit = (e) => {
     e.preventDefault();
     validatePassword();
-
-    // You can add additional logic here, such as submitting the form if the password is valid.
+// You can add additional logic here, such as submitting the form if the password is valid.
   };
+
+  const handleChange = (e) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (inputs) {
+      try {
+        await publicRequest.put(`/users/${staff._id}`, inputs);
+        window.location.reload();
+      } catch (error) {}
+    }
+  };
+  
   return (
     <div className="user">
       <div className="userTitleContainer">
@@ -99,10 +116,6 @@ export default function User() {
             <div className="userShowInfo">
               <PermIdentity className="userShowIcon" />
               <span className="userShowInfoTitle">{staff.username}</span>
-            </div>
-            <div className="userShowInfo">
-              <CalendarToday className="userShowIcon" />
-              <span className="userShowInfoTitle">10.12.1999</span>
             </div>
             <span className="userShowTitle">Contact Details</span>
             <div className="userShowInfo">
@@ -145,6 +158,8 @@ export default function User() {
                   type="text"
                   placeholder={staff.username}
                   className="userUpdateInput"
+                  name="username"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -153,6 +168,8 @@ export default function User() {
                   type="text"
                   placeholder={staff.fullname}
                   className="userUpdateInput"
+                  name="fullname"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -161,6 +178,8 @@ export default function User() {
                   type="text"
                   placeholder={staff.email}
                   className="userUpdateInput"
+                  name="email"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -169,6 +188,8 @@ export default function User() {
                   type="text"
                   placeholder={staff.phone}
                   className="userUpdateInput"
+                  name="phone"
+                  onChange={handleChange}
                 />
               </div>
               <div className="userUpdateItem">
@@ -177,6 +198,8 @@ export default function User() {
                   type="text"
                   placeholder={staff.address}
                   className="userUpdateInput"
+                  name="address"
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -185,6 +208,7 @@ export default function User() {
                 <label htmlFor="file"></label>
                 <input type="file" id="file" style={{ display: "none" }} />
               </div>
+                
               <div className="reset">
                 <button className="reset-button" onClick={handleSubmit}>
                   Reset Password
@@ -196,7 +220,7 @@ export default function User() {
                   <p style={{ color: "green", width: "200px" }}>{success}</p>
                 )}
               </div>
-              <button className="userUpdateButton">Update</button>
+              <button className="userUpdateButton" onClick={handleUpdate}>Update</button>
             </div>
           </form>
         </div>

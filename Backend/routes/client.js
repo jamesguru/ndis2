@@ -37,7 +37,7 @@ router.post("/", upload.array('files', 5), async (req, res) => {
     const client = await newClient.save();
     res.status(201).json(client);
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error.message)
   }
 });
 
@@ -51,11 +51,27 @@ router.get("/", async (req, res) => {
   }
 });
 
+// UPDATE CLIENT
+
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedClient = await Client.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+  
+    res.status(201).json(updatedClient);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 // DELETE CLIENT
 
 router.delete("/:id", async (req, res) => {
   try {
-    await Client.findOneAndDelete(req.params.id);
+    await Client.findByIdAndDelete(req.params.id);
     res.status(200).json("The client has been deleted");
   } catch (error) {
     res.status(500).json("You are not authorized for this operation");

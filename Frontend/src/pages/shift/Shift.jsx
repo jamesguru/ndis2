@@ -247,7 +247,7 @@ const Shift = () => {
               Bid
             </button>
           )}
-          {shift?.clockout?.length === 0 && shift.staffEmail && 
+          {shift.staffEmail && 
           <div className="distance">
           <strong><span>Distance covered: </span></strong>
             <input type="number" placeholder={shift?.distance} onChange={(e) => setDistance(e.target.value)}/>

@@ -5,6 +5,7 @@ import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { publicRequest } from "../../requestMethods";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import Select from 'react-select';
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -361,17 +362,14 @@ export default function Product() {
                   </li>
                 </ul>
 
-                <select name="staffEmail" onChange={selectStaff}>
-                  {staffs.map((staff, index) => (
-                    <option
-                      value={staff.email}
-                      name={staff.email}
-                      key={index}
-                    >
-                      {staff.fullname}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                styles={{margin : "20px 0px"}}
+                  options={staffs.map(staff => ({ value: staff.email, label: staff.fullname }))}
+                  onChange={(selectedOption) => setStaffEmail(selectedOption.value)}
+                  placeholder="Select Staff"
+                  isSearchable
+                />
+                <br />
                 <button
                   className="productAddButton"
                   onClick={handleAssignShift}
